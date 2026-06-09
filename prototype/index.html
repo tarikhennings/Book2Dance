@@ -685,7 +685,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
     <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;max-width:1040px">
       <div class="card card-p"><h3 style="margin-bottom:4px">Tanzstile</h3>
         <p class="muted tiny" style="margin:0 0 14px">Stehen im Buchungsfilter & beim Kurs anlegen zur Auswahl.</p>
-        <div class="tiny muted" style="margin-bottom:7px">🌐 Global <span class="muted">(von Agentur)</span></div>
+        <div class="between" style="margin-bottom:7px"><div class="tiny muted">🌐 Global <span class="muted">(von Agentur · 👁 ausblenden · ⧉ kopieren)</span></div><button type="button" class="btn btn-ghost btn-sm" onclick="catCopyAll('styles')">⧉ Alle kopieren</button></div>
         <div class="chips" id="cat-styles-inherit"></div>
         <div class="tiny muted" style="margin:12px 0 7px">🏫 Eigene</div>
         <div class="chips" id="cat-styles-local"></div>
@@ -696,7 +696,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
       </div>
       <div class="card card-p"><h3 style="margin-bottom:4px">Level</h3>
         <p class="muted tiny" style="margin:0 0 14px">z. B. Anfänger, Fortgeschritten, Mittelstufe.</p>
-        <div class="tiny muted" style="margin-bottom:7px">🌐 Global <span class="muted">(von Agentur)</span></div>
+        <div class="between" style="margin-bottom:7px"><div class="tiny muted">🌐 Global <span class="muted">(von Agentur · 👁 ausblenden · ⧉ kopieren)</span></div><button type="button" class="btn btn-ghost btn-sm" onclick="catCopyAll('levels')">⧉ Alle kopieren</button></div>
         <div class="chips" id="cat-levels-inherit"></div>
         <div class="tiny muted" style="margin:12px 0 7px">🏫 Eigene</div>
         <div class="chips" id="cat-levels-local"></div>
@@ -707,7 +707,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
       </div>
       <div class="card card-p" style="grid-column:1 / -1"><h3 style="margin-bottom:4px">Kurs-Tags</h3>
         <p class="muted tiny" style="margin:0 0 14px">Freie Chips über dem Kurstitel (z. B. „Kein Partner nötig").</p>
-        <div class="tiny muted" style="margin-bottom:7px">🌐 Global <span class="muted">(von Agentur – nicht änderbar)</span></div>
+        <div class="between" style="margin-bottom:7px"><div class="tiny muted">🌐 Global <span class="muted">(von Agentur · 👁 ausblenden · ⧉ kopieren)</span></div><button type="button" class="btn btn-ghost btn-sm" onclick="catCopyAll('tags')">⧉ Alle kopieren</button></div>
         <div class="chips" id="inheritedMerkmaleList"></div>
         <hr class="hr">
         <div class="tiny muted" style="margin-bottom:7px">🏫 Eigene Tags dieser Schule</div>
@@ -1299,8 +1299,34 @@ function syncKursPreview(){
 /* ===== Merkmale-Bibliothek: global (Agentur) + lokal (Schule) ===== */
 var MERKMALE={
   global:['Anfänger','Fortgeschritten','Kein Partner nötig','Mit Partner','Barrierefrei','Ü30'],
-  local:['Barfuß möglich','Beliebt']
+  local:['Barfuß möglich','Beliebt'],
+  hidden:[]
 };
+/* Globale Katalog-Einträge in der Schule: ein-/ausblenden, kopieren */
+function catStore(key){return key==='tags'?MERKMALE:CAT[key];}
+function renderCat(){renderAllMerkmale();renderCatalogs();}
+function catHideToggle(key,name){var s=catStore(key);var i=s.hidden.indexOf(name);if(i>=0)s.hidden.splice(i,1);else s.hidden.push(name);renderCat();}
+function catCopyOne(key,name){var s=catStore(key);if(s.local.indexOf(name)<0)s.local.push(name);renderCat();}
+function catCopyAll(key){var s=catStore(key);s.global.forEach(function(n){if(s.local.indexOf(n)<0)s.local.push(n);});renderCat();}
+function schoolGlobalChips(containerId,key){
+  var c=document.getElementById(containerId); if(!c)return; c.innerHTML='';
+  var s=catStore(key);
+  if(!s.global.length){var e=document.createElement('span');e.className='muted tiny';e.textContent='—';c.appendChild(e);}
+  s.global.forEach(function(n){
+    var hidden=s.hidden.indexOf(n)>=0;
+    var span=document.createElement('span');span.className='chip';
+    if(hidden){span.style.opacity='.45';span.style.textDecoration='line-through';}
+    span.appendChild(document.createTextNode(n));
+    var eye=document.createElement('button');eye.type='button';eye.className='chip-x';eye.style.opacity='.75';
+    eye.textContent=hidden?'🚫':'👁';eye.title=hidden?'Wieder einblenden':'Für meine Schule ausblenden';
+    eye.onclick=function(ev){ev.stopPropagation();catHideToggle(key,n);};
+    var cp=document.createElement('button');cp.type='button';cp.className='chip-x';cp.style.opacity='.75';
+    cp.textContent='⧉';cp.title='Als eigenen Eintrag kopieren';
+    cp.onclick=function(ev){ev.stopPropagation();catCopyOne(key,n);};
+    span.appendChild(eye);span.appendChild(cp);
+    c.appendChild(span);
+  });
+}
 function libChip(name,opts){
   opts=opts||{};
   var span=document.createElement('span');
@@ -1317,14 +1343,13 @@ function renderAgencyMerkmale(){
   MERKMALE.global.forEach(function(n){c.appendChild(libChip(n,{onRemove:function(){removeMerkmal('global',n);}}));});
 }
 function renderSchoolMerkmale(){
-  var gi=document.getElementById('inheritedMerkmaleList');
-  if(gi){gi.innerHTML='';MERKMALE.global.forEach(function(n){gi.appendChild(libChip(n,{tag:'Agentur'}));});}
+  schoolGlobalChips('inheritedMerkmaleList','tags');
   var lo=document.getElementById('localMerkmaleList');
   if(lo){lo.innerHTML='';MERKMALE.local.forEach(function(n){lo.appendChild(libChip(n,{onRemove:function(){removeMerkmal('local',n);}}));});}
 }
 function renderCourseQuick(){
   var g=document.getElementById('courseQuickGlobal');
-  if(g){g.innerHTML='';MERKMALE.global.forEach(function(n){g.appendChild(libChip(n,{ghost:true,onClick:function(){addCourseChipByName(n);}}));});}
+  if(g){g.innerHTML='';MERKMALE.global.filter(function(n){return MERKMALE.hidden.indexOf(n)<0;}).forEach(function(n){g.appendChild(libChip(n,{ghost:true,onClick:function(){addCourseChipByName(n);}}));});}
   var l=document.getElementById('courseQuickLocal');
   if(l){l.innerHTML='';MERKMALE.local.forEach(function(n){l.appendChild(libChip(n,{ghost:true,onClick:function(){addCourseChipByName(n);}}));});}
 }
@@ -1341,16 +1366,15 @@ function removeMerkmal(scope,name){
 
 /* ===== Kataloge: Tanzstile & Level (global + lokal) ===== */
 var CAT={
-  styles:{global:['Discofox','Salsa','West Coast Swing','Standard/Latein','HipHop'],local:[]},
-  levels:{global:['Anfänger','Fortgeschritten'],local:[]}
+  styles:{global:['Discofox','Salsa','West Coast Swing','Standard/Latein','HipHop'],local:[],hidden:[]},
+  levels:{global:['Anfänger','Fortgeschritten'],local:[],hidden:[]}
 };
-function catAll(key){return CAT[key].global.concat(CAT[key].local);}
+function catAll(key){return CAT[key].global.filter(function(n){return CAT[key].hidden.indexOf(n)<0;}).concat(CAT[key].local);}
 function renderCatalogs(){
   ['styles','levels'].forEach(function(key){
     var ag=document.getElementById('cat-'+key+'-agency');
     if(ag){ag.innerHTML='';CAT[key].global.forEach(function(n){ag.appendChild(libChip(n,{onRemove:function(){catRemove(key,'global',n);}}));});}
-    var inh=document.getElementById('cat-'+key+'-inherit');
-    if(inh){inh.innerHTML='';CAT[key].global.forEach(function(n){inh.appendChild(libChip(n,{tag:'Agentur'}));});}
+    schoolGlobalChips('cat-'+key+'-inherit',key);
     var lo=document.getElementById('cat-'+key+'-local');
     if(lo){lo.innerHTML='';CAT[key].local.forEach(function(n){lo.appendChild(libChip(n,{onRemove:function(){catRemove(key,'local',n);}}));});}
   });

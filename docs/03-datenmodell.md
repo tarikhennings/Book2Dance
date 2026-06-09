@@ -149,7 +149,7 @@ Catalog {
 ```
 
 - Verwaltung: **eigener Screen je Ebene** — Agentur „Kataloge" (S10) und Schule „🗂 Katalog" (S7e), jeweils Tanzstile/Level/Kurs-Tags (global geerbt + eigene). Neue Stile/Level auch **inline beim Kurs anlegen** (➕ Neu) → landen im Schul-Katalog.
-- Effektive Liste = `global + school.local`; geerbte (globale) sind in der Schule read-only.
+- Effektive Liste = `(global \ school.hidden) + school.local`. Die Schule kann globale Einträge **ausblenden** (`hidden[]`, 👁), **einzeln kopieren** (⧉ → wird zu eigenem, editierbarem `local`-Eintrag) oder **alle kopieren** (⧉ Alle kopieren). Gilt für Tanzstile, Level und Kurs-Tags.
 - Verwendung: Buchungsfilter S1 (`Alle Stile`/`Alle Level` + Liste) und Kurs-Editor S6 (Pflichtauswahl). Im Prototyp via `CAT`/`populateCatalogSelects()` (Selects mit `data-cat`).
 
 ## 4. Tags — global + lokal
