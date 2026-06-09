@@ -148,7 +148,7 @@ Catalog {
 }
 ```
 
-- Verwaltung: Agentur-Screen **„Kataloge"** (S10) → Tanzstile, Level, Kurs-Tags; Schule ergänzt eigene unter Einstellungen → „Tanzstile & Level".
+- Verwaltung: **eigener Screen je Ebene** — Agentur „Kataloge" (S10) und Schule „🗂 Katalog" (S7e), jeweils Tanzstile/Level/Kurs-Tags (global geerbt + eigene). Neue Stile/Level auch **inline beim Kurs anlegen** (➕ Neu) → landen im Schul-Katalog.
 - Effektive Liste = `global + school.local`; geerbte (globale) sind in der Schule read-only.
 - Verwendung: Buchungsfilter S1 (`Alle Stile`/`Alle Level` + Liste) und Kurs-Editor S6 (Pflichtauswahl). Im Prototyp via `CAT`/`populateCatalogSelects()` (Selects mit `data-cat`).
 
