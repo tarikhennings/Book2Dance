@@ -135,6 +135,23 @@ Session {
 
 ---
 
+## 3a. Kataloge (Auswahllisten) — Tanzstile & Level
+
+Kontrollierte Listen, die Buchungsfilter und die Kurs-Dropdowns (Tanzstil/Level) speisen. Gleiche Scope-Logik wie Tags: **global (Agentur) + lokal (Schule)**.
+
+```
+Catalog {
+  type     : enum(style | level)
+  label    : string
+  scope    : enum(agency | school)
+  school_id: uuid | null
+}
+```
+
+- Verwaltung: Agentur-Screen **„Kataloge"** (S10) → Tanzstile, Level, Kurs-Tags; Schule ergänzt eigene unter Einstellungen → „Tanzstile & Level".
+- Effektive Liste = `global + school.local`; geerbte (globale) sind in der Schule read-only.
+- Verwendung: Buchungsfilter S1 (`Alle Stile`/`Alle Level` + Liste) und Kurs-Editor S6 (Pflichtauswahl). Im Prototyp via `CAT`/`populateCatalogSelects()` (Selects mit `data-cat`).
+
 ## 4. Tags — global + lokal
 
 Wiederverwendbare Chips, die auf der Buchungsseite über dem Kurstitel erscheinen (z. B. „Anfänger", „Kein Partner nötig"). Im UI **Tags** genannt; der heutige Katalog ist der **Kurs-Tags-Katalog** (Tags, die an Kurse/Termine gesetzt werden). `category` lässt Raum für weitere Tag-Kataloge später.

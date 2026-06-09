@@ -221,7 +221,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
     <optgroup label="Backend Agentur">
       <option value="agentur">S8 · Übersicht</option>
       <option value="agentur-neu">S9 · Schule anlegen</option>
-      <option value="agentur-merkmale">S10 · Tags (Kurs-Katalog)</option>
+      <option value="agentur-merkmale">S10 · Kataloge</option>
       <option value="agentur-reminder">S11 · Reminder-Standards</option>
       <option value="agentur-vorlagen">S12 · Vorlagen</option>
       <option value="agentur-versand">S13 · Versand</option>
@@ -278,8 +278,8 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <div class="container" style="padding-top:20px">
     <div class="card card-p filter-card">
       <div class="grid grid-4 filterbar" style="align-items:end">
-        <div class="filter-field"><label class="label filter-label">Tanzstil</label><select class="select"><option>Alle Stile</option><option>Discofox</option><option>Salsa</option><option>West Coast Swing</option><option>Standard/Latein</option><option>HipHop</option></select></div>
-        <div class="filter-field"><label class="label filter-label">Level</label><select class="select"><option>Alle Level</option><option>Anfänger</option><option>Fortgeschritten</option></select></div>
+        <div class="filter-field"><label class="label filter-label">Tanzstil</label><select class="select" data-cat="styles" data-allopt="Alle Stile"></select></div>
+        <div class="filter-field"><label class="label filter-label">Level</label><select class="select" data-cat="levels" data-allopt="Alle Level"></select></div>
         <div class="filter-field"><label class="label filter-label">Zeitraum</label><select class="select"><option>Nächste 3 Monate</option><option>Juni 2026</option><option>Juli 2026</option></select></div>
         <div class="filter-field"><label class="label filter-label">Suche</label><input class="input" placeholder="z. B. Discofox"></div>
       </div>
@@ -505,8 +505,8 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
       <div class="col gap-24">
         <div class="card card-p"><h3 style="margin-bottom:16px">Grunddaten</h3>
           <div class="field"><label class="label">Kurstitel</label><input class="input" value="Discofox Schnupperstunde"></div>
-          <div class="grid grid-2"><div class="field"><label class="label">Tanzstil</label><select class="select"><option>Discofox</option><option>Salsa</option><option>West Coast Swing</option></select></div>
-            <div class="field"><label class="label">Level</label><select class="select"><option>Anfänger</option><option>Fortgeschritten</option></select></div></div>
+          <div class="grid grid-2"><div class="field"><label class="label">Tanzstil</label><select class="select" data-cat="styles"></select></div>
+            <div class="field"><label class="label">Level</label><select class="select" data-cat="levels"></select></div></div>
           <div class="field"><label class="label">Beschreibung</label><textarea class="textarea">Lockere Schnupperstunde für Einsteiger – Grundschritte, Drehungen, erste Figuren.</textarea></div>
           <div class="grid grid-2"><div class="field"><label class="label">Was mitbringen</label><input class="input" value="Bequeme Kleidung, saubere Schuhe"></div>
             <div class="field"><label class="label">Ort / Raum</label><input class="input" value="Saal 1"></div></div>
@@ -770,6 +770,27 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
           </div>
         </div>
 
+        <div class="card card-p"><h3 style="margin-bottom:4px">Tanzstile & Level</h3>
+          <p class="muted tiny" style="margin:0 0 14px">Die Auswahllisten für Buchungsfilter & Kurse. Globale kommen von der Agentur – eigene ergänzt du hier.</p>
+          <div class="tiny muted" style="margin-bottom:7px">🌐 Tanzstile (global)</div>
+          <div class="chips" id="cat-styles-inherit"></div>
+          <div class="tiny muted" style="margin:12px 0 7px">🏫 Eigene Tanzstile</div>
+          <div class="chips" id="cat-styles-local"></div>
+          <div class="row mt-12" style="gap:8px">
+            <input class="input" id="cat-styles-localInput" placeholder="Eigenen Tanzstil …" onkeydown="if(event.key==='Enter'){event.preventDefault();catAdd('styles','local')}">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="catAdd('styles','local')">+ Hinzufügen</button>
+          </div>
+          <hr class="hr">
+          <div class="tiny muted" style="margin-bottom:7px">🌐 Level (global)</div>
+          <div class="chips" id="cat-levels-inherit"></div>
+          <div class="tiny muted" style="margin:12px 0 7px">🏫 Eigene Level</div>
+          <div class="chips" id="cat-levels-local"></div>
+          <div class="row mt-12" style="gap:8px">
+            <input class="input" id="cat-levels-localInput" placeholder="Eigenes Level …" onkeydown="if(event.key==='Enter'){event.preventDefault();catAdd('levels','local')}">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="catAdd('levels','local')">+ Hinzufügen</button>
+          </div>
+        </div>
+
         <div class="card card-p"><div class="between" style="margin-bottom:4px"><h3>Reminder-Standard</h3>
             <label class="checkbox" style="align-items:center;margin:0"><input type="checkbox" id="remSchoolUseAgency" onchange="toggleRemSchool(this)"><span>Agentur-Standard verwenden</span></label></div>
           <p class="muted tiny" id="remSchoolHint" style="margin:0 0 14px"></p>
@@ -871,7 +892,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item active" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -910,7 +931,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item active" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -952,31 +973,51 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item active" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item active" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
   </aside>
   <main class="main">
-    <div class="between page-head"><div><h1>Tags</h1><p class="muted" style="margin:4px 0 0">Zentrale Tag-Kataloge für alle betreuten Tanzschulen.</p></div></div>
+    <div class="between page-head"><div><h1>Kataloge</h1><p class="muted" style="margin:4px 0 0">Zentrale Auswahllisten für alle Schulen: Tanzstile, Level und Kurs-Tags.</p></div></div>
     <div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start;max-width:1000px">
-      <div class="card card-p">
-        <div class="between" style="margin-bottom:4px"><h3>Kurs-Tags · Katalog</h3><span class="badge badge-accent">Kurse</span></div>
-        <p class="muted tiny" style="margin:0 0 14px">Chips, die Schulen an ihre Kurse setzen können – ohne sie selbst zu pflegen. (Weitere Tag-Kataloge folgen.)</p>
-        <div class="chips" id="globalMerkmaleList"></div>
-        <div class="row mt-16" style="gap:8px">
-          <input class="input" id="globalMerkmalInput" placeholder="Neuen Kurs-Tag …" onkeydown="if(event.key==='Enter'){event.preventDefault();addMerkmal('global')}">
-          <button type="button" class="btn btn-primary btn-sm" onclick="addMerkmal('global')">+ Hinzufügen</button>
+      <div class="col gap-24">
+        <div class="card card-p">
+          <div class="between" style="margin-bottom:4px"><h3>Tanzstile</h3><span class="badge badge-accent">Filter & Kurs</span></div>
+          <p class="muted tiny" style="margin:0 0 14px">Stehen im Buchungsfilter und beim Kurs anlegen zur Auswahl.</p>
+          <div class="chips" id="cat-styles-agency"></div>
+          <div class="row mt-16" style="gap:8px">
+            <input class="input" id="cat-styles-agencyInput" placeholder="Neuer Tanzstil …" onkeydown="if(event.key==='Enter'){event.preventDefault();catAdd('styles','global')}">
+            <button type="button" class="btn btn-primary btn-sm" onclick="catAdd('styles','global')">+ Hinzufügen</button>
+          </div>
+        </div>
+        <div class="card card-p">
+          <div class="between" style="margin-bottom:4px"><h3>Level</h3><span class="badge badge-accent">Filter & Kurs</span></div>
+          <p class="muted tiny" style="margin:0 0 14px">z. B. Anfänger, Fortgeschritten, Mittelstufe.</p>
+          <div class="chips" id="cat-levels-agency"></div>
+          <div class="row mt-16" style="gap:8px">
+            <input class="input" id="cat-levels-agencyInput" placeholder="Neues Level …" onkeydown="if(event.key==='Enter'){event.preventDefault();catAdd('levels','global')}">
+            <button type="button" class="btn btn-primary btn-sm" onclick="catAdd('levels','global')">+ Hinzufügen</button>
+          </div>
+        </div>
+        <div class="card card-p">
+          <div class="between" style="margin-bottom:4px"><h3>Kurs-Tags</h3><span class="badge">Chips</span></div>
+          <p class="muted tiny" style="margin:0 0 14px">Freie Chips über dem Kurstitel (z. B. „Kein Partner nötig").</p>
+          <div class="chips" id="globalMerkmaleList"></div>
+          <div class="row mt-16" style="gap:8px">
+            <input class="input" id="globalMerkmalInput" placeholder="Neuen Kurs-Tag …" onkeydown="if(event.key==='Enter'){event.preventDefault();addMerkmal('global')}">
+            <button type="button" class="btn btn-primary btn-sm" onclick="addMerkmal('global')">+ Hinzufügen</button>
+          </div>
         </div>
       </div>
       <div class="card card-p" style="position:sticky;top:24px;background:var(--muted-2)">
         <h3>So funktioniert's</h3>
         <ol class="muted small mt-8" style="margin:0;padding-left:18px;line-height:2">
-          <li><b>Global</b> (hier): von der Agentur, gelten für <b>alle</b> Schulen</li>
-          <li><b>Lokal</b>: jede Schule legt in ihren Einstellungen eigene an</li>
-          <li>Beim Kurs anlegen wählt die Schule aus beiden Töpfen</li>
+          <li><b>Global</b> (hier): gelten für <b>alle</b> Schulen</li>
+          <li><b>Lokal</b>: jede Schule ergänzt eigene in den Einstellungen</li>
+          <li><b>Tanzstil/Level</b> speisen Buchungsfilter & Kurs-Dropdowns; <b>Kurs-Tags</b> die Chip-Schnellauswahl</li>
         </ol>
-        <div class="notice mt-16">Änderungen hier wirken sofort auf die Schnellauswahl in jeder Schule.</div>
+        <div class="notice mt-16">Änderungen wirken sofort in allen Schulen.</div>
       </div>
     </div>
   </main>
@@ -989,7 +1030,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item active" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item active" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -1026,7 +1067,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item active" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item active" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -1061,7 +1102,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item active" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item active" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -1272,6 +1313,40 @@ function addMerkmal(scope){
 function removeMerkmal(scope,name){
   MERKMALE[scope]=MERKMALE[scope].filter(function(x){return x!==name;});
   renderAllMerkmale();
+}
+
+/* ===== Kataloge: Tanzstile & Level (global + lokal) ===== */
+var CAT={
+  styles:{global:['Discofox','Salsa','West Coast Swing','Standard/Latein','HipHop'],local:[]},
+  levels:{global:['Anfänger','Fortgeschritten'],local:[]}
+};
+function catAll(key){return CAT[key].global.concat(CAT[key].local);}
+function renderCatalogs(){
+  ['styles','levels'].forEach(function(key){
+    var ag=document.getElementById('cat-'+key+'-agency');
+    if(ag){ag.innerHTML='';CAT[key].global.forEach(function(n){ag.appendChild(libChip(n,{onRemove:function(){catRemove(key,'global',n);}}));});}
+    var inh=document.getElementById('cat-'+key+'-inherit');
+    if(inh){inh.innerHTML='';CAT[key].global.forEach(function(n){inh.appendChild(libChip(n,{tag:'Agentur'}));});}
+    var lo=document.getElementById('cat-'+key+'-local');
+    if(lo){lo.innerHTML='';CAT[key].local.forEach(function(n){lo.appendChild(libChip(n,{onRemove:function(){catRemove(key,'local',n);}}));});}
+  });
+  populateCatalogSelects();
+}
+function catAdd(key,scope){
+  var inp=document.getElementById('cat-'+key+'-'+(scope==='global'?'agencyInput':'localInput'));
+  var v=(inp.value||'').trim(); if(!v)return;
+  if(CAT[key].global.indexOf(v)<0 && CAT[key].local.indexOf(v)<0)CAT[key][scope].push(v);
+  inp.value=''; renderCatalogs();
+}
+function catRemove(key,scope,name){CAT[key][scope]=CAT[key][scope].filter(function(x){return x!==name;});renderCatalogs();}
+function populateCatalogSelects(){
+  [].forEach.call(document.querySelectorAll('select[data-cat]'),function(sel){
+    var key=sel.getAttribute('data-cat'), allLabel=sel.getAttribute('data-allopt'), prev=sel.value;
+    sel.innerHTML='';
+    if(allLabel){var o=document.createElement('option');o.textContent=allLabel;sel.appendChild(o);}
+    catAll(key).forEach(function(n){var o=document.createElement('option');o.textContent=n;sel.appendChild(o);});
+    [].forEach.call(sel.options,function(o){if(o.textContent===prev)sel.value=prev;});
+  });
 }
 
 /* ===== Serie / Wiederholung ===== */
@@ -1730,6 +1805,7 @@ function saveLook(){
   setTimeout(function(){b.textContent=old;b.disabled=false;},1600);
 }
 renderAllMerkmale();
+renderCatalogs();
 renderTemplates();
 renderReminders();
 if(document.getElementById('schoolUseAgency'))toggleSchoolUseAgency(document.getElementById('schoolUseAgency'));
