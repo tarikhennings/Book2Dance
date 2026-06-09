@@ -225,6 +225,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
       <option value="agentur-merkmale">S10 · Tags (Kurs-Katalog)</option>
       <option value="agentur-reminder">S11 · Reminder-Standards</option>
       <option value="agentur-vorlagen">S12 · Vorlagen</option>
+      <option value="agentur-versand">S13 · Versand</option>
     </optgroup>
   </select>
 </div>
@@ -782,6 +783,13 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
             <p class="muted tiny" style="margin:0">Nachrichten-Vorlagen für deine Reminder verwaltest du auf einer eigenen Seite.</p></div>
             <a class="btn btn-secondary btn-sm" data-go="schule-vorlagen">Zu den Vorlagen →</a></div></div>
 
+        <div class="card card-p"><div class="between" style="margin-bottom:4px"><h3>Versand</h3>
+            <label class="checkbox" style="align-items:center;margin:0"><input type="checkbox" id="schoolUseAgency" checked onchange="toggleSchoolUseAgency(this)"><span>Agentur-Versand übernehmen</span></label></div>
+          <p class="muted tiny" style="margin:0 0 10px">Übernimm den Versand der Agentur (z. B. Dancepreneur) – oder richte unten eigenen Absender & Server ein.</p>
+          <div id="schoolSendInherit" class="notice" style="margin:0"></div>
+        </div>
+
+        <div id="schoolSendOwn">
         <div class="card card-p"><h3 style="margin-bottom:4px">Absender (Versand-Identität)</h3>
           <p class="muted tiny" style="margin:0 0 14px">Wie deine Reminder bei den Teilnehmern ankommen – pro Kanal.</p>
           <div class="tiny muted" style="margin-bottom:8px">✉ E-Mail</div>
@@ -825,6 +833,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
             <p class="muted tiny mt-8">Deine Mails laufen dann über deinen eigenen Server – Zustellbarkeit & Reputation verantwortest du selbst.</p>
           </div>
         </div>
+        </div><!-- /schoolSendOwn -->
 
       </div>
 
@@ -863,7 +872,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item active" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -902,7 +911,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item active" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -944,7 +953,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item active" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a>
+    <a class="nav-item active" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -981,7 +990,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item active" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item active" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -1018,7 +1027,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item active" data-go="agentur-vorlagen">✉ Vorlagen</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item active" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -1041,6 +1050,78 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
           <span class="chip">{{schule_name}}</span><span class="chip">{{storno_link}}</span>
         </div>
         <div class="notice mt-16">Pro Kanal eigene Vorlagen: E-Mail mit Betreff, SMS/WhatsApp als Kurztext, Anruf als Sprechtext (TTS).</div>
+      </div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S13 AGENTUR · VERSAND ============ -->
+<section class="screen" id="screen-agentur-versand">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
+    <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item active" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Versand</h1><p class="muted" style="margin:4px 0 0">Absender-Identität & Mailserver der Agentur. Schulen können das übernehmen oder eigenes einrichten.</p></div></div>
+    <div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start;max-width:1000px">
+      <div class="col gap-24">
+        <div class="card card-p"><h3 style="margin-bottom:4px">Absender (Versand-Identität)</h3>
+          <p class="muted tiny" style="margin:0 0 14px">Standard-Absender für alle Schulen, die den Agentur-Versand übernehmen.</p>
+          <div class="tiny muted" style="margin-bottom:8px">✉ E-Mail</div>
+          <div class="grid grid-2">
+            <div class="field"><label class="label">Absendername</label><input class="input" value="DanceConsult" oninput="setSenderAgency('fromName',this.value)"></div>
+            <div class="field"><label class="label">Antwort-Adresse (Reply-To)</label><input class="input" type="email" value="hallo@danceconsult.de" oninput="setSenderAgency('replyTo',this.value)"></div>
+          </div>
+          <div class="field"><label class="label">Absende-Adresse</label>
+            <div class="row" style="gap:8px;align-items:center"><input class="input" value="versand@dancepreneur.com" oninput="setSenderAgency('fromEmail',this.value)"><span class="badge badge-green">✓ verifiziert</span></div></div>
+          <hr class="hr">
+          <div class="grid grid-2">
+            <div class="field" style="margin:0"><label class="label">💬 SMS-Absenderkennung</label><input class="input" value="DanceCons" maxlength="11" oninput="setSenderAgency('smsSender',this.value)"></div>
+            <div class="field" style="margin:0"><label class="label">🟢 WhatsApp / 📞 Anruf</label><div class="row" style="gap:8px;align-items:center;margin-top:2px"><span class="badge badge-green">WhatsApp Business verbunden</span></div></div>
+          </div>
+        </div>
+
+        <div class="card card-p"><h3 style="margin-bottom:4px">E-Mail-Versand der Agentur</h3>
+          <p class="muted tiny" style="margin:0 0 14px">Worüber die Agentur-Mails technisch verschickt werden.</p>
+          <div class="grid grid-2" id="sendModeAgency">
+            <label class="term" onclick="setSendModeAgency(this,'managed')"><div><div style="font-weight:650">Über Book2Dance</div><div class="muted tiny">Verwalteter Versand</div></div><span class="badge">wählen</span></label>
+            <label class="term selected" onclick="setSendModeAgency(this,'own')"><div><div style="font-weight:650">Eigener SMTP / ESP</div><div class="muted tiny">z. B. Dancepreneur</div></div><span class="badge badge-green">aktiv</span></label>
+          </div>
+          <div id="sendManagedAgency" class="mt-16" style="display:none">
+            <div class="between" style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;background:var(--muted-2)">
+              <div><div style="font-weight:550;font-size:14px">Domain-Authentifizierung (DKIM/SPF)</div><div class="muted tiny mono">danceconsult.book2dance.de</div></div>
+              <span class="badge badge-green">✓ authentifiziert</span></div>
+            <p class="muted tiny mt-8">Versand über den zentralen Book2Dance-Mailserver, signiert für die Agentur-Domain.</p>
+          </div>
+          <div id="sendOwnAgency" class="mt-16">
+            <div class="field" style="margin:0 0 12px"><label class="label">Bezeichnung</label><input class="input" value="Dancepreneur" style="max-width:260px"></div>
+            <div class="grid grid-2">
+              <div class="field" style="margin:0"><label class="label">SMTP-Host</label><input class="input" value="smtp.dancepreneur.com"></div>
+              <div class="field" style="margin:0"><label class="label">Port</label><input class="input" value="587" style="max-width:120px"></div>
+            </div>
+            <div class="grid grid-2 mt-16">
+              <div class="field" style="margin:0"><label class="label">Benutzer</label><input class="input" value="versand@dancepreneur.com"></div>
+              <div class="field" style="margin:0"><label class="label">Passwort</label><input class="input" type="password" placeholder="••••••••"></div>
+            </div>
+            <div class="field mt-16" style="margin:0"><label class="label">Verschlüsselung</label><select class="select" style="max-width:200px"><option>STARTTLS</option><option>SSL/TLS</option><option>keine</option></select></div>
+            <div class="row mt-16" style="gap:8px"><button type="button" class="btn btn-secondary btn-sm" onclick="alert('Testverbindung erfolgreich (Prototyp)')">Verbindung testen</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-p" style="position:sticky;top:24px;background:var(--muted-2)">
+        <h3>Vererbung</h3>
+        <ol class="muted small mt-8" style="margin:0;padding-left:18px;line-height:2">
+          <li><b>Agentur</b> (hier): eigener Absender + Server (z. B. Dancepreneur)</li>
+          <li><b>Schule</b>: „Agentur-Versand übernehmen" → nutzt genau das</li>
+          <li><b>oder Schule</b>: eigene Domain/SMTP in den Schul-Einstellungen</li>
+        </ol>
+        <div class="notice mt-16">So müssen kleine Schulen nichts einrichten – große können trotzdem ihre eigene Domain nutzen.</div>
       </div>
     </div>
   </main>
@@ -1404,19 +1485,44 @@ var TEMPLATES=[
   {id:'t4',scope:'agency',channel:'voice',format:'text',name:'Anruf-Ansage',subject:'',body:'Hallo {{teilnehmer_name}}. Dies ist eine automatische Erinnerung von {{schule_name}} an Ihre Schnupperstunde {{kurs_titel}} am {{termin_datum}} um {{termin_uhrzeit}}. Wir freuen uns auf Sie.'},
   {id:'t5',scope:'school',channel:'email',format:'html',name:'Schrittwerk – herzlich',subject:'Wir sehen uns beim {{kurs_titel}}! 💃',body:'<h2>Hi {{teilnehmer_name}} 👋</h2>\n<p style="color:#3f3f46;line-height:1.6">wir freuen uns riesig auf dich am <b>{{termin_datum}} um {{termin_uhrzeit}}</b> in {{ort}}.</p>\n<p style="color:#71717a;font-size:13px">Liebe Grüße<br>Dein Team von {{schule_name}}</p>'}
 ];
+// Schul-Versand (eigene Identität) + Agentur-Versand (z. B. Dancepreneur)
 var SENDER={fromName:'Tanzschule Schrittwerk',fromEmail:'kurse@schrittwerk.book2dance.de',replyTo:'info@schrittwerk.de',emailVerified:true,smsSender:'Schrittwerk',waConnected:true};
-function setSender(field,val){SENDER[field]=val;if(document.getElementById('tplModal').style.display==='flex')tplPreview();}
+var SENDER_AGENCY={fromName:'DanceConsult',fromEmail:'versand@dancepreneur.com',replyTo:'hallo@danceconsult.de',emailVerified:true,smsSender:'DanceCons',waConnected:true};
+var SEND_AGENCY_MODE='own';      // 'managed' (Book2Dance) | 'own' (eigener SMTP der Agentur, z. B. Dancepreneur)
+var SCHOOL_USE_AGENCY=true;      // Schule übernimmt Agentur-Versand?
+function effSender(){return SCHOOL_USE_AGENCY?SENDER_AGENCY:SENDER;}
+function setSender(field,val){SENDER[field]=val;refreshTplPreviewIfOpen();}
+function setSenderAgency(field,val){SENDER_AGENCY[field]=val;refreshTplPreviewIfOpen();}
+function refreshTplPreviewIfOpen(){if(document.getElementById('tplModal').style.display==='flex')tplPreview();}
 function setSendMode(el,mode){
   document.querySelectorAll('#sendMode .term').forEach(function(t){t.classList.remove('selected');var b=t.querySelector('.badge');b.textContent='wählen';b.className='badge';});
   el.classList.add('selected');var b=el.querySelector('.badge');b.textContent='aktiv';b.className='badge badge-green';
   document.getElementById('sendManaged').style.display=(mode==='managed')?'':'none';
   document.getElementById('sendOwn').style.display=(mode==='own')?'':'none';
 }
+function setSendModeAgency(el,mode){
+  SEND_AGENCY_MODE=mode;
+  document.querySelectorAll('#sendModeAgency .term').forEach(function(t){t.classList.remove('selected');var b=t.querySelector('.badge');b.textContent='wählen';b.className='badge';});
+  el.classList.add('selected');var b=el.querySelector('.badge');b.textContent='aktiv';b.className='badge badge-green';
+  document.getElementById('sendManagedAgency').style.display=(mode==='managed')?'':'none';
+  document.getElementById('sendOwnAgency').style.display=(mode==='own')?'':'none';
+}
+function agencyVersandSummary(){
+  var modus=SEND_AGENCY_MODE==='own'?'eigener SMTP der Agentur':'über Book2Dance (verwaltet)';
+  return '<b>'+SENDER_AGENCY.fromName+'</b> · '+SENDER_AGENCY.fromEmail+' · '+modus;
+}
+function toggleSchoolUseAgency(cb){
+  SCHOOL_USE_AGENCY=cb.checked;
+  var own=document.getElementById('schoolSendOwn'); if(own)own.style.display=cb.checked?'none':'';
+  var inh=document.getElementById('schoolSendInherit'); if(inh){inh.style.display=cb.checked?'':'none';inh.innerHTML=cb.checked?('Es gilt der Versand der Agentur: '+agencyVersandSummary()):'';}
+  refreshTplPreviewIfOpen();
+}
 function senderMeta(ch){
-  if(ch==='email')return 'Von: <b>'+SENDER.fromName+'</b> &lt;'+SENDER.fromEmail+'&gt;<br>Antwort an: '+SENDER.replyTo;
-  if(ch==='sms')return 'Absender (SMS): <b>'+SENDER.smsSender+'</b>';
-  if(ch==='whatsapp')return 'WhatsApp Business: <b>'+SENDER.fromName+'</b>';
-  if(ch==='voice')return 'Anruf von: <b>'+SENDER.fromName+'</b>';
+  var S=effSender();
+  if(ch==='email')return 'Von: <b>'+S.fromName+'</b> &lt;'+S.fromEmail+'&gt;<br>Antwort an: '+S.replyTo;
+  if(ch==='sms')return 'Absender (SMS): <b>'+S.smsSender+'</b>';
+  if(ch==='whatsapp')return 'WhatsApp Business: <b>'+S.fromName+'</b>';
+  if(ch==='voice')return 'Anruf von: <b>'+S.fromName+'</b>';
   return '';
 }
 var TPL_SEQ=100, tplEditingId=null, tplEditingScope='agency';
@@ -1627,6 +1733,7 @@ function saveLook(){
 renderAllMerkmale();
 renderTemplates();
 renderReminders();
+if(document.getElementById('schoolUseAgency'))toggleSchoolUseAgency(document.getElementById('schoolUseAgency'));
 (function(){var s=document.getElementById('serStart');if(s){var wd=new Date(s.value+'T00:00:00').getDay();var c=document.querySelector('#serWeekdays .wd[data-d="'+wd+'"]');if(c){c.classList.remove('chip-ghost');c.classList.add('chip-accent');}}})();
 if(document.getElementById('serUnit'))serUnitChange();
 generateSeries();
