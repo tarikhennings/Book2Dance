@@ -522,8 +522,8 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
       <div class="col gap-24">
         <div class="card card-p"><h3 style="margin-bottom:16px">Grunddaten</h3>
           <div class="field"><label class="label">Kurstitel</label><input class="input" value="Discofox Schnupperstunde"></div>
-          <div class="grid grid-2"><div class="field"><label class="label">Tanzstil</label><select class="select" data-cat="styles" data-cat-create="1" onchange="catAddInline(this)"></select></div>
-            <div class="field"><label class="label">Level</label><select class="select" data-cat="levels" data-cat-create="1" onchange="catAddInline(this)"></select></div></div>
+          <div class="grid grid-2"><div class="field"><label class="label">Tanzstil</label><div class="row" style="gap:6px"><select class="select" data-cat="styles"></select><button type="button" class="btn btn-secondary btn-sm" onclick="catNew('styles',this)" title="Neuen Tanzstil anlegen">+ Neu</button></div></div>
+            <div class="field"><label class="label">Level</label><div class="row" style="gap:6px"><select class="select" data-cat="levels"></select><button type="button" class="btn btn-secondary btn-sm" onclick="catNew('levels',this)" title="Neues Level anlegen">+ Neu</button></div></div></div>
           <div class="field"><label class="label">Beschreibung</label><textarea class="textarea">Lockere Schnupperstunde für Einsteiger – Grundschritte, Drehungen, erste Figuren.</textarea></div>
           <div class="grid grid-2"><div class="field"><label class="label">Was mitbringen</label><input class="input" value="Bequeme Kleidung, saubere Schuhe"></div>
             <div class="field"><label class="label">Ort / Raum</label><input class="input" value="Saal 1"></div></div>
@@ -1429,17 +1429,16 @@ function populateCatalogSelects(){
     sel.innerHTML='';
     if(allLabel){var o=document.createElement('option');o.textContent=allLabel;sel.appendChild(o);}
     catAll(key).forEach(function(n){var o=document.createElement('option');o.textContent=n;sel.appendChild(o);});
-    if(sel.hasAttribute('data-cat-create')){var a=document.createElement('option');a.value='__add__';a.textContent=(key==='styles'?'➕ Neuer Tanzstil …':'➕ Neues Level …');sel.appendChild(a);}
     [].forEach.call(sel.options,function(o){if(o.textContent===prev)sel.value=prev;});
   });
 }
-function catAddInline(sel){
-  if(sel.value!=='__add__')return;
-  var key=sel.getAttribute('data-cat');
+/* "+ Neu"-Button neben dem Dropdown: legt im Schul-Katalog an und wählt direkt aus */
+function catNew(key,btn){
+  var sel=btn.parentNode.querySelector('select[data-cat="'+key+'"]'); if(!sel)return;
   var name=(prompt(key==='styles'?'Neuen Tanzstil anlegen:':'Neues Level anlegen:')||'').trim();
-  if(name && CAT[key].global.indexOf(name)<0 && CAT[key].local.indexOf(name)<0)CAT[key].local.push(name);
-  renderCatalogs();
-  sel.value='';
+  if(!name)return;
+  if(CAT[key].global.indexOf(name)<0 && CAT[key].local.indexOf(name)<0)CAT[key].local.push(name);
+  renderCat();
   [].forEach.call(sel.options,function(o){if(o.textContent===name)sel.value=name;});
 }
 
