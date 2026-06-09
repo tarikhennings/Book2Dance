@@ -1,0 +1,1637 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Book2Dance – Prototyp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --app-bg:#f7f7f9; --muted:#f4f4f5; --muted-2:#fafafa;
+  --border:#e7e7ea; --text:#18181b; --muted-text:#71717a;
+  --accent:#dc2626; --accent-strong:#b91c1c; --accent-2:#e11d48;
+  --accent-bg:#fef2f2; --accent-border:#fee2e2; --accent-fg:#ffffff; --accent-rgb:220,38,38;
+  --hero-grad:linear-gradient(135deg,#fef2f2 0%,#fff1f2 55%,#fff 100%);
+  --green:#16a34a; --green-bg:#dcfce7; --amber:#d97706; --amber-bg:#fef3c7;
+  --red:#dc2626; --red-bg:#fee2e2; --blue:#2563eb; --blue-bg:#dbeafe;
+  --radius:10px; --shadow:0 1px 2px rgba(24,24,27,.06),0 1px 3px rgba(24,24,27,.04);
+  --shadow-md:0 8px 24px rgba(24,24,27,.08); --shadow-lg:0 16px 48px rgba(24,24,27,.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Geist","Inter",system-ui,-apple-system,sans-serif;color:var(--text);
+  background:var(--app-bg);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none;cursor:pointer}
+h1,h2,h3,h4{margin:0;font-weight:650;letter-spacing:-.02em}
+h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
+.muted{color:var(--muted-text)} .small{font-size:13px} .tiny{font-size:12px}
+.mono{font-family:"Geist Mono",ui-monospace,monospace}
+.container{max-width:1100px;margin:0 auto;padding:28px 24px}
+.row{display:flex;gap:14px;align-items:center} .wrap{flex-wrap:wrap}
+.between{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.col{display:flex;flex-direction:column;gap:8px}
+.grid{display:grid;gap:18px}
+.grid-2{grid-template-columns:repeat(2,1fr)} .grid-3{grid-template-columns:repeat(3,1fr)} .grid-4{grid-template-columns:repeat(4,1fr)}
+.gap-24{gap:24px} .mt-8{margin-top:8px} .mt-16{margin-top:16px} .mt-24{margin-top:24px}
+.spacer{flex:1}
+
+/* Brand logo */
+.logo{width:38px;height:38px;border-radius:11px;color:#fff;font-weight:700;font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 4px 12px rgba(var(--accent-rgb),.35)}
+.logo.sm{width:30px;height:30px;border-radius:9px;font-size:13px}
+
+/* Card */
+.card{background:var(--bg);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+.card-p{padding:22px}
+.card-hover{transition:box-shadow .18s,transform .18s,border-color .18s}
+.card-hover:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:#d4d4d8}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;font:inherit;font-weight:550;
+  font-size:14px;cursor:pointer;border-radius:var(--radius);padding:10px 17px;border:1px solid transparent;
+  transition:.16s;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(var(--accent-rgb),.28)}
+.btn-primary:hover{background:var(--accent-strong);box-shadow:0 4px 14px rgba(var(--accent-rgb),.38)}
+.btn-dark{background:var(--text);color:#fff}.btn-dark:hover{background:#000}
+.btn-secondary{background:var(--bg);color:var(--text);border-color:var(--border)}
+.btn-secondary:hover{background:var(--muted);border-color:#d4d4d8}
+.btn-ghost{background:transparent;color:var(--muted-text)}.btn-ghost:hover{background:var(--muted);color:var(--text)}
+.btn-sm{padding:7px 13px;font-size:13px} .btn-lg{padding:13px 22px;font-size:15px} .btn-block{width:100%}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:550;padding:4px 10px;
+  border-radius:999px;background:var(--muted);color:#52525b;border:1px solid var(--border)}
+.badge-accent{background:var(--accent-bg);color:var(--accent);border-color:transparent}
+.badge-green{background:var(--green-bg);color:#15803d;border-color:transparent}
+.badge-amber{background:var(--amber-bg);color:#b45309;border-color:transparent}
+.badge-red{background:var(--red-bg);color:#b91c1c;border-color:transparent}
+.badge-blue{background:var(--blue-bg);color:#1d4ed8;border-color:transparent}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;background:var(--green)}
+
+/* Form */
+.label{font-size:13px;font-weight:550;margin-bottom:6px;display:block}
+.input,.select,.textarea{width:100%;font:inherit;font-size:14px;color:var(--text);background:var(--bg);
+  border:1px solid var(--border);border-radius:var(--radius);padding:10px 13px;transition:.15s}
+.input:focus,.select:focus,.textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.textarea{min-height:84px;resize:vertical}
+.field{margin-bottom:16px}
+.checkbox{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted-text)}
+
+/* Term radio */
+.term{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1.5px solid var(--border);
+  border-radius:var(--radius);padding:13px 15px;cursor:pointer;transition:.15s}
+.term:hover{border-color:#c7c7cf;background:var(--muted-2)}
+.term.selected{border-color:var(--accent);background:var(--accent-bg)}
+.term.full{opacity:.5;cursor:not-allowed}
+
+/* Table */
+.table{width:100%;border-collapse:collapse;font-size:14px}
+.table th{text-align:left;font-weight:550;color:var(--muted-text);font-size:11px;text-transform:uppercase;
+  letter-spacing:.04em;padding:11px 14px;border-bottom:1px solid var(--border)}
+.table td{padding:13px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.table tr:last-child td{border-bottom:none}
+.table tbody tr{transition:background .12s} .table tbody tr:hover{background:var(--muted-2)}
+
+/* Public top bar */
+.pubtop{background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:5;padding:13px 24px;display:flex;align-items:center;gap:13px}
+.hero{background:var(--hero-grad);border-bottom:1px solid var(--border)}
+
+/* Kursbild (Platzhalter-Verläufe stehen für hochgeladene Fotos) */
+.course-photo{background:linear-gradient(135deg,#7c3aed,#db2777 55%,#f59e0b);background-size:cover;background-position:center}
+.course-photo.p2{background:linear-gradient(135deg,#2563eb,#06b6d4 60%,#10b981)}
+.course-photo.p3{background:linear-gradient(135deg,#b91c1c,#f59e0b)}
+.course-photo.p4{background:linear-gradient(135deg,#0f766e,#65a30d)}
+/* Hero mit Hintergrundbild (Kurs-Landingpage) */
+.hero-photo{position:relative;border-bottom:none;color:#fff}
+.hero-photo::before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,8,20,.72),rgba(10,8,20,.30));z-index:0}
+.hero-photo>*{position:relative;z-index:1}
+.hero-photo h1{color:#fff}
+.hero-photo .muted{color:rgba(255,255,255,.85)}
+.hero-photo .badge{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.28);backdrop-filter:blur(4px)}
+.hero-photo .badge-accent{background:rgba(255,255,255,.92);color:var(--accent);border-color:transparent}
+
+/* App shell */
+.shell{display:grid;grid-template-columns:236px 1fr;min-height:640px}
+.sidebar{background:var(--bg);border-right:1px solid var(--border);padding:18px 14px;display:flex;flex-direction:column;gap:3px}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 16px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:var(--radius);font-size:14px;
+  color:var(--muted-text);cursor:pointer;transition:.13s}
+.nav-item:hover{background:var(--muted);color:var(--text)}
+.nav-item.active{background:var(--accent-bg);color:var(--accent);font-weight:550}
+.nav-sec{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#a1a1aa;padding:14px 11px 4px}
+.main{padding:30px 34px;overflow:auto;background:var(--app-bg)}
+.page-head{margin-bottom:24px}
+.stat{padding:20px 22px}.stat .n{font-size:30px;font-weight:700;letter-spacing:-.03em}.stat .l{font-size:13px;color:var(--muted-text);margin-top:2px}
+
+/* Stepper */
+.steps{display:flex;gap:10px;margin-bottom:24px;align-items:center}
+.step{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted-text)}
+.step .num{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.step.active .num{background:var(--accent);color:#fff;border-color:var(--accent)}
+.step.active{color:var(--text);font-weight:550}
+.step.done .num{background:var(--accent-bg);color:var(--accent);border-color:transparent}
+.step-line{width:30px;height:1.5px;background:var(--border)}
+
+/* Editable chips */
+.chips{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:550;padding:4px 7px 4px 11px;
+  border-radius:999px;background:var(--muted);color:#52525b;border:1px solid var(--border)}
+.chip.chip-accent{background:var(--accent-bg);color:var(--accent);border-color:var(--accent-border)}
+.chip-x{border:none;background:transparent;color:inherit;cursor:pointer;font-size:15px;line-height:1;
+  padding:0 1px;opacity:.55;border-radius:50%}
+.chip-x:hover{opacity:1}
+.chip-mini{font-size:11px;padding:3px 5px 3px 9px}
+.chip-ghost{cursor:pointer;background:transparent;border-style:dashed;color:var(--muted-text);padding:4px 11px}
+.chip-ghost:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(11,11,15,.45);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow:auto}
+.modal{background:var(--bg);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-lg);width:100%;max-width:880px;padding:24px}
+
+/* Rich-Text (E-Mail) */
+.rte-toolbar{display:flex;flex-wrap:wrap;gap:3px;border:1px solid var(--border);border-bottom:none;border-radius:var(--radius) var(--radius) 0 0;padding:6px;background:var(--muted-2)}
+.rte-toolbar button{font:inherit;font-size:13px;border:1px solid transparent;background:transparent;border-radius:6px;padding:4px 9px;cursor:pointer;color:var(--text);line-height:1.2}
+.rte-toolbar button:hover{background:var(--bg);border-color:var(--border)}
+.rte{border:1px solid var(--border);border-radius:0 0 var(--radius) var(--radius);padding:12px 14px;min-height:180px;font-size:14px;line-height:1.6;background:var(--bg);overflow:auto}
+.rte:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.rte h2{font-size:19px;margin:0 0 10px}
+.email-preview{background:#fff;border:1px solid var(--border);border-radius:10px;padding:18px;max-width:100%}
+
+/* Color swatches */
+.swatch{width:38px;height:38px;border-radius:10px;background:var(--sw);border:2px solid var(--border);cursor:pointer;
+  position:relative;transition:.15s;box-shadow:0 1px 3px rgba(24,24,27,.12)}
+.swatch:hover{transform:translateY(-2px)}
+.swatch.active{border-color:var(--text);box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--sw)}
+.swatch.active::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+
+.hr{height:1px;background:var(--border);border:none;margin:20px 0}
+.notice{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:var(--radius);padding:13px 15px;color:var(--accent-strong);font-size:13px}
+.dashed{background:var(--muted-2);border:1px dashed var(--border);border-radius:var(--radius);padding:14px 16px;color:var(--muted-text);font-size:13px;text-align:center}
+
+/* Demo chrome */
+.demobar{position:sticky;top:0;z-index:50;background:#0b0b0f;color:#e4e4e7;display:flex;align-items:center;gap:14px;padding:10px 18px;font-size:13px}
+.demobar select{background:#1c1c22;color:#fff;border:1px solid #33333c;border-radius:8px;padding:6px 10px;font:inherit;font-size:13px}
+.demobar .pill{background:#1c1c22;border:1px solid #33333c;border-radius:999px;padding:4px 11px;font-size:12px;color:#a1a1aa}
+.frame{max-width:1240px;margin:0 auto}
+.screen{display:none;animation:fade .25s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.world-pad{padding:24px}
+.surface{background:var(--bg);border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-md)}
+@media(max-width:880px){.shell{grid-template-columns:1fr}.sidebar{display:none}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.demobar .hideS{display:none}
+  /* Filter mobil: kompakte, horizontal scrollbare Pills statt 4 gestapelter Felder */
+  .filterbar{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;padding:4px 2px 6px;margin:-4px -2px 0}
+  .filterbar .filter-field{flex:0 0 auto;margin:0}
+  .filterbar .filter-label{display:none}
+  .filterbar .select,.filterbar .input{width:auto;min-width:0;padding:8px 14px;border-radius:999px;font-size:13px}
+  .filter-card{padding:12px 14px}
+  .hero-photo h1{font-size:24px}
+}
+</style>
+</head>
+<body>
+
+<!-- DEMO BAR -->
+<div class="demobar">
+  <div class="logo sm">B2</div>
+  <b style="color:#fff">Book2Dance</b>
+  <span class="pill hideS">Klickbarer Prototyp · MVP</span>
+  <div class="spacer"></div>
+  <span class="hideS muted" style="color:#71717a">Screen:</span>
+  <select id="picker" onchange="go(this.value)">
+    <optgroup label="Öffentlich (Flow 1)">
+      <option value="home">Start / Übersicht</option>
+      <option value="booking">S1 · Buchungsseite</option>
+      <option value="kurs">S2 · Kurs-Landingpage</option>
+      <option value="anmeldung">S3 · Anmeldeformular</option>
+      <option value="bestaetigung">S4 · Bestätigung</option>
+    </optgroup>
+    <optgroup label="Backend Schule">
+      <option value="schule-dash">S5 · Dashboard</option>
+      <option value="schule-kurs">S6 · Kurs anlegen</option>
+      <option value="schule-teilnehmer">S7 · Teilnehmer</option>
+      <option value="schule-team">S7c · Team / Rollen</option>
+      <option value="schule-vorlagen">S7d · Vorlagen</option>
+      <option value="schule-einstellungen">S7b · Einstellungen / Look</option>
+    </optgroup>
+    <optgroup label="Backend Agentur">
+      <option value="agentur">S8 · Übersicht</option>
+      <option value="agentur-neu">S9 · Schule anlegen</option>
+      <option value="agentur-merkmale">S10 · Tags (Kurs-Katalog)</option>
+      <option value="agentur-reminder">S11 · Reminder-Standards</option>
+      <option value="agentur-vorlagen">S12 · Vorlagen</option>
+    </optgroup>
+  </select>
+</div>
+
+<div class="frame">
+
+<!-- ============ HOME ============ -->
+<section class="screen active" id="screen-home">
+  <div class="container" style="max-width:960px">
+    <div class="row" style="margin-bottom:6px"><div class="logo">B2</div>
+      <div><h1>Book2Dance</h1><div class="muted small">Schnupperkurs-Buchung für Tanzschulen · MVP-Prototyp · shadcn-Stil</div></div></div>
+    <div class="notice mt-16">Klick dich durch alle Flows. Oben rechts kannst du jeden Screen direkt anspringen. Beispieldaten, keine echte Logik.</div>
+
+    <h2 class="mt-24" style="margin-bottom:14px">Die 3 Welten</h2>
+    <div class="grid grid-3">
+      <a class="card card-p card-hover col" data-go="booking">
+        <span class="badge badge-accent">Öffentlich</span>
+        <h3 class="mt-8">Endkunde bucht</h3>
+        <p class="muted small" style="margin:0">Buchungsseite → Kurs → Anmeldung → Bestätigung. Ohne Login.</p>
+        <span class="btn btn-primary btn-sm mt-8" style="align-self:flex-start">Flow starten →</span>
+      </a>
+      <a class="card card-p card-hover col" data-go="schule-dash">
+        <span class="badge">Backend</span>
+        <h3 class="mt-8">Tanzschule</h3>
+        <p class="muted small" style="margin:0">Dashboard, Kurse & Termine anlegen, Teilnehmer verwalten.</p>
+        <span class="btn btn-secondary btn-sm mt-8" style="align-self:flex-start">Öffnen →</span>
+      </a>
+      <a class="card card-p card-hover col" data-go="agentur">
+        <span class="badge">Enterprise</span>
+        <h3 class="mt-8">Agentur</h3>
+        <p class="muted small" style="margin:0">Viele Tanzschulen verwalten, neue Schule anlegen.</p>
+        <span class="btn btn-secondary btn-sm mt-8" style="align-self:flex-start">Öffnen →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S1 BUCHUNGSSEITE ============ -->
+<section class="screen" id="screen-booking">
+ <div class="world-pad"><div class="surface">
+  <div class="pubtop">
+    <div class="logo sm school-logo">SW</div>
+    <div><div style="font-weight:600">Tanzschule Schrittwerk</div><div class="muted tiny">Schnupperkurse online buchen</div></div>
+    <div class="spacer"></div><a class="nav-item" data-go="home">← Prototyp-Start</a>
+  </div>
+  <div class="hero"><div class="container">
+    <span class="badge badge-accent">Unverbindlich & kostenlos</span>
+    <h1 class="mt-8">Finde deinen Tanzkurs</h1>
+    <p class="muted" style="margin:6px 0 0;max-width:520px">Schnupper rein, bevor du dich festlegst. Such dir einen Termin aus und sichere dir in 30 Sekunden deinen Platz.</p>
+  </div></div>
+  <div class="container" style="padding-top:20px">
+    <div class="card card-p filter-card">
+      <div class="grid grid-4 filterbar" style="align-items:end">
+        <div class="filter-field"><label class="label filter-label">Tanzstil</label><select class="select"><option>Alle Stile</option><option>Discofox</option><option>Salsa</option><option>West Coast Swing</option><option>Standard/Latein</option><option>HipHop</option></select></div>
+        <div class="filter-field"><label class="label filter-label">Level</label><select class="select"><option>Alle Level</option><option>Anfänger</option><option>Fortgeschritten</option></select></div>
+        <div class="filter-field"><label class="label filter-label">Zeitraum</label><select class="select"><option>Nächste 3 Monate</option><option>Juni 2026</option><option>Juli 2026</option></select></div>
+        <div class="filter-field"><label class="label filter-label">Suche</label><input class="input" placeholder="z. B. Discofox"></div>
+      </div>
+    </div>
+
+    <h3 class="mt-24 muted" style="font-weight:550;margin-bottom:8px">Juni 2026</h3>
+    <div class="grid grid-3">
+      <a class="card card-p card-hover col" data-go="kurs">
+        <div class="row wrap"><span class="badge badge-accent">Discofox</span><span class="badge">Anfänger</span></div>
+        <h3 class="mt-8">Discofox Schnupperstunde</h3>
+        <div class="muted small">Di · 16.06.2026 · 19:00–20:00</div>
+        <div class="row mt-8"><span class="dot"></span><span class="small">4 von 12 Plätzen frei</span></div>
+        <span class="btn btn-primary btn-sm btn-block mt-8">Ansehen & buchen</span>
+      </a>
+      <a class="card card-p card-hover col" data-go="kurs">
+        <div class="row wrap"><span class="badge badge-accent">West Coast Swing</span><span class="badge badge-amber">Probe-Block</span></div>
+        <h3 class="mt-8">WCS Probe-Block · 3 Termine</h3>
+        <div class="muted small">Mo · ab 22.06.2026 · 18:30</div>
+        <div class="row mt-8"><span class="dot"></span><span class="small">5 von 8 Plätzen frei</span></div>
+        <span class="btn btn-primary btn-sm btn-block mt-8">Ansehen & buchen</span>
+      </a>
+      <div class="card card-p col" style="opacity:.72">
+        <div class="row wrap"><span class="badge badge-accent">Salsa Cubana</span><span class="badge">Anfänger</span></div>
+        <h3 class="mt-8">Salsa Schnupperkurs</h3>
+        <div class="muted small">Do · 18.06.2026 · 20:00–21:00</div>
+        <div class="row mt-8"><span class="badge badge-red">Ausgebucht</span></div>
+        <span class="btn btn-secondary btn-sm btn-block mt-8" style="cursor:not-allowed">Warteliste (Phase 2)</span>
+      </div>
+    </div>
+
+    <h3 class="mt-24 muted" style="font-weight:550;margin-bottom:8px">Juli 2026</h3>
+    <div class="grid grid-3">
+      <a class="card card-p card-hover col" data-go="kurs">
+        <div class="row wrap"><span class="badge badge-accent">Standard/Latein</span><span class="badge">Anfänger</span></div>
+        <h3 class="mt-8">Grundkurs Schnupperstunde</h3>
+        <div class="muted small">Sa · 04.07.2026 · 16:00–17:00</div>
+        <div class="row mt-8"><span class="dot"></span><span class="small">9 von 14 Plätzen frei</span></div>
+        <span class="btn btn-primary btn-sm btn-block mt-8">Ansehen & buchen</span>
+      </a>
+      <a class="card card-p card-hover col" data-go="kurs">
+        <div class="row wrap"><span class="badge badge-accent">HipHop Teens</span><span class="badge">12–16 J.</span></div>
+        <h3 class="mt-8">HipHop Schnupperstunde</h3>
+        <div class="muted small">Fr · 10.07.2026 · 17:00–18:00</div>
+        <div class="row mt-8"><span class="dot"></span><span class="small">8 von 16 Plätzen frei</span></div>
+        <span class="btn btn-primary btn-sm btn-block mt-8">Ansehen & buchen</span>
+      </a>
+    </div>
+    <p class="muted small mt-24" style="text-align:center">Powered by Book2Dance</p>
+  </div>
+ </div></div>
+</section>
+
+<!-- ============ S2 KURS ============ -->
+<section class="screen" id="screen-kurs">
+ <div class="world-pad"><div class="surface">
+  <div class="pubtop">
+    <div class="logo sm school-logo">SW</div><div><div style="font-weight:600">Tanzschule Schrittwerk</div><div class="muted tiny">Schnupperkurs buchen</div></div>
+    <div class="spacer"></div><a class="nav-item" data-go="booking">← Alle Kurse</a>
+  </div>
+  <div class="hero hero-photo course-photo" style="padding:34px 0 30px"><div class="container">
+    <div class="row wrap"><span class="badge badge-accent">Discofox</span><span class="badge">Anfänger</span><span class="badge">Kein Partner nötig</span></div>
+    <h1 class="mt-8">Discofox Schnupperstunde</h1>
+    <p class="muted" style="margin:6px 0 0;max-width:560px">In 60 Minuten lernst du die Grundschritte, die dich durch jede Tanzfläche bringen.</p>
+  </div></div>
+  <div class="container" style="padding-top:22px">
+   <div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start">
+    <div class="col gap-24">
+      <div class="card card-p"><h3>Über diesen Kurs</h3>
+        <p class="muted small mt-8" style="margin:0">Lockere, unverbindliche Schnupperstunde für Einsteiger. Unsere Trainer:innen zeigen dir Discofox-Grundschritte, Drehungen und erste Figuren. Danach weißt du, ob der volle Kurs etwas für dich ist.</p></div>
+      <div class="card card-p"><h3>Gut zu wissen</h3>
+        <ul class="muted small mt-8" style="margin:0;padding-left:18px;line-height:1.9">
+          <li>Bequeme Kleidung & saubere Schuhe mit glatter Sohle</li>
+          <li>Komm allein oder zu zweit – ein Partner ist nicht nötig</li>
+          <li>Sei 10 Minuten vorher da</li></ul></div>
+      <div class="card card-p"><h3>Ort</h3>
+        <div class="small mt-8" style="font-weight:550">Saal 1 · Tanzschule Schrittwerk</div>
+        <div class="muted small">Bahnhofstraße 12, 83022 Rosenheim</div>
+        <div class="dashed mt-8">🗺️ Kartenvorschau (Platzhalter)</div></div>
+    </div>
+    <div class="card card-p" style="position:sticky;top:80px">
+      <h3>Termin wählen</h3>
+      <p class="muted tiny" style="margin:4px 0 12px">Einzeltermin – wähle einen Tag</p>
+      <div class="col" style="gap:10px" id="terms">
+        <label class="term selected" onclick="pick(this)"><div><div style="font-weight:550">Di · 16.06.2026</div><div class="muted tiny">19:00–20:00</div></div><span class="badge badge-green">4 frei</span></label>
+        <label class="term" onclick="pick(this)"><div><div style="font-weight:550">Di · 23.06.2026</div><div class="muted tiny">19:00–20:00</div></div><span class="badge badge-green">9 frei</span></label>
+        <label class="term" onclick="pick(this)"><div><div style="font-weight:550">Di · 30.06.2026</div><div class="muted tiny">19:00–20:00</div></div><span class="badge badge-amber">2 frei</span></label>
+        <label class="term full"><div><div style="font-weight:550">Di · 07.07.2026</div><div class="muted tiny">19:00–20:00</div></div><span class="badge badge-red">voll</span></label>
+      </div>
+      <a class="btn btn-primary btn-lg btn-block mt-16" data-go="anmeldung">Diesen Termin buchen</a>
+      <p class="muted tiny" style="text-align:center;margin:10px 0 0">Kostenlos & unverbindlich</p>
+    </div>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- ============ S3 ANMELDUNG ============ -->
+<section class="screen" id="screen-anmeldung">
+ <div class="world-pad"><div class="surface">
+  <div class="pubtop"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600">Tanzschule Schrittwerk</div><div class="muted tiny">Anmeldung abschließen</div></div>
+    <div class="spacer"></div><a class="nav-item" data-go="kurs">← Zurück</a></div>
+  <div class="container" style="max-width:560px">
+    <h1>Fast geschafft</h1>
+    <p class="muted" style="margin:6px 0 0">Trag dich ein – du bekommst sofort eine Bestätigung per E-Mail.</p>
+    <div class="card card-p mt-16" style="background:var(--accent-bg);border-color:var(--accent-border)">
+      <div class="between"><div><div class="tiny" style="color:var(--accent)">Dein Termin</div>
+        <div style="font-weight:650">Discofox Schnupperstunde</div>
+        <div class="muted small">Di · 16.06.2026 · 19:00–20:00 · Saal 1</div></div>
+        <span class="badge badge-green">4 frei</span></div>
+    </div>
+    <form class="card card-p mt-16" onsubmit="event.preventDefault();go('bestaetigung')">
+      <div class="field"><label class="label">Vor- & Nachname</label><input class="input" placeholder="Maria Musterfrau" required></div>
+      <div class="field"><label class="label">E-Mail</label><input class="input" type="email" placeholder="maria@example.de" required></div>
+      <div class="field"><label class="label">Telefon <span class="muted">(für SMS-/WhatsApp-/Anruf-Erinnerung)</span></label><input class="input" type="tel" placeholder="0151 23456789"></div>
+      <div class="field"><label class="label">Nachricht <span class="muted">(optional)</span></label><textarea class="textarea" placeholder="z. B. Ich komme mit meinem Partner."></textarea></div>
+
+      <div class="dashed" style="text-align:left;background:var(--muted-2);padding:14px 16px;margin-bottom:16px">
+        <div style="font-weight:550;color:var(--text);margin-bottom:4px">Wie dürfen wir dich an deinen Termin erinnern?</div>
+        <p class="muted tiny" style="margin:0 0 10px">Du kannst die Einwilligung jederzeit widerrufen.</p>
+        <label class="checkbox" style="margin-bottom:8px"><input type="checkbox" checked style="margin-top:2px"><span style="color:var(--text)">✉ E-Mail</span></label>
+        <label class="checkbox" style="margin-bottom:8px"><input type="checkbox" style="margin-top:2px"><span style="color:var(--text)">💬 SMS <span class="muted">(Telefonnummer nötig)</span></span></label>
+        <label class="checkbox" style="margin-bottom:8px"><input type="checkbox" style="margin-top:2px"><span style="color:var(--text)">🟢 WhatsApp <span class="muted">(Telefonnummer nötig)</span></span></label>
+        <label class="checkbox"><input type="checkbox" style="margin-top:2px"><span style="color:var(--text)">📞 Anruf <span class="muted">(Telefonnummer nötig)</span></span></label>
+      </div>
+
+      <label class="checkbox field"><input type="checkbox" required style="margin-top:2px"><span>Ich akzeptiere die Datenschutzbestimmungen und bin mit der Kontaktaufnahme einverstanden.</span></label>
+      <button class="btn btn-primary btn-lg btn-block" type="submit">Verbindlich anmelden</button>
+      <p class="muted tiny" style="text-align:center;margin:12px 0 0">Kostenlos · Kein Account nötig · Jederzeit stornierbar</p>
+    </form>
+  </div>
+ </div></div>
+</section>
+
+<!-- ============ S4 BESTÄTIGUNG ============ -->
+<section class="screen" id="screen-bestaetigung">
+ <div class="world-pad"><div class="surface">
+  <div class="pubtop"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600">Tanzschule Schrittwerk</div><div class="muted tiny">Anmeldung bestätigt</div></div>
+    <div class="spacer"></div><a class="nav-item" data-go="booking">Weitere Kurse</a></div>
+  <div class="container" style="max-width:560px;text-align:center">
+    <div style="width:68px;height:68px;border-radius:50%;background:var(--green-bg);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:34px;margin:18px auto 0">✓</div>
+    <h1 class="mt-16">Du bist dabei! 🎉</h1>
+    <p class="muted" style="margin:8px 0 0">Bestätigung ging an <b>maria@example.de</b>.</p>
+    <div class="card card-p mt-24" style="text-align:left">
+      <div class="tiny" style="color:var(--accent)">Dein Termin</div>
+      <h3 class="mt-8">Discofox Schnupperstunde</h3>
+      <div class="muted small">Di · 16.06.2026 · 19:00–20:00</div>
+      <hr class="hr">
+      <div class="col" style="gap:7px">
+        <div class="row small"><span style="width:84px;color:var(--muted-text)">Ort</span><span>Saal 1, Bahnhofstraße 12, Rosenheim</span></div>
+        <div class="row small"><span style="width:84px;color:var(--muted-text)">Mitbringen</span><span>Bequeme Kleidung, saubere Schuhe</span></div>
+        <div class="row small"><span style="width:84px;color:var(--muted-text)">Kosten</span><span>Kostenlos</span></div>
+        <div class="row small"><span style="width:84px;color:var(--muted-text)">Reminder</span><span class="row" style="gap:6px">laut deiner Auswahl · <span class="badge badge-accent">✉ E-Mail</span></span></div>
+      </div>
+      <div class="row mt-16" style="gap:8px">
+        <a class="btn btn-primary btn-block">📅 Zum Kalender</a>
+        <a class="btn btn-secondary btn-block">Stornieren</a>
+      </div>
+    </div>
+    <div class="notice mt-16" style="text-align:left">📧 Im echten Produkt läuft die Stornierung über den persönlichen Link in der Bestätigungsmail – kein Login nötig.</div>
+    <a class="btn btn-ghost mt-16" data-go="booking">← Zurück zu allen Kursen</a>
+  </div>
+ </div></div>
+</section>
+
+<!-- ============ S5 SCHUL-DASHBOARD ============ -->
+<section class="screen" id="screen-schule-dash">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
+    <a class="nav-item active" data-go="schule-dash">▦ Dashboard</a>
+    <a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a>
+    <a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Dashboard</h1><p class="muted" style="margin:4px 0 0">Willkommen zurück 👋 Das läuft bei deinen Schnupperkursen.</p></div>
+      <a class="btn btn-primary" data-go="schule-kurs">+ Neuer Kurs</a></div>
+    <div class="grid grid-4">
+      <div class="card stat"><div class="n">5</div><div class="l">Aktive Schnupperkurse</div></div>
+      <div class="card stat"><div class="n">38</div><div class="l">Anmeldungen (30 T.)</div></div>
+      <div class="card stat"><div class="n" style="color:var(--green)">3</div><div class="l">Neu heute</div></div>
+      <div class="card stat"><div class="n">72%</div><div class="l">Ø Auslastung</div></div>
+    </div>
+    <div class="grid mt-24" style="grid-template-columns:1.4fr 1fr;align-items:start">
+      <div class="card"><div class="card-p" style="padding-bottom:6px"><h3>Nächste Termine</h3></div>
+        <table class="table"><thead><tr><th>Kurs</th><th>Termin</th><th>Belegung</th><th></th></tr></thead><tbody>
+          <tr><td><b>Discofox Schnupperstunde</b><div class="muted tiny">Saal 1</div></td><td>Di · 16.06. · 19:00</td><td><span class="badge badge-amber">8 / 12</span></td><td><a class="btn btn-ghost btn-sm" data-go="schule-teilnehmer">Liste</a></td></tr>
+          <tr><td><b>Salsa Schnupperkurs</b><div class="muted tiny">Saal 2</div></td><td>Do · 18.06. · 20:00</td><td><span class="badge badge-red">10 / 10</span></td><td><a class="btn btn-ghost btn-sm" data-go="schule-teilnehmer">Liste</a></td></tr>
+          <tr><td><b>WCS Probe-Block</b><div class="muted tiny">3 Termine</div></td><td>Mo · 22.06. · 18:30</td><td><span class="badge badge-green">3 / 8</span></td><td><a class="btn btn-ghost btn-sm" data-go="schule-teilnehmer">Liste</a></td></tr>
+          <tr><td><b>Grundkurs Schnupperstunde</b><div class="muted tiny">Saal 1</div></td><td>Sa · 04.07. · 16:00</td><td><span class="badge badge-green">5 / 14</span></td><td><a class="btn btn-ghost btn-sm" data-go="schule-teilnehmer">Liste</a></td></tr>
+        </tbody></table></div>
+      <div class="card"><div class="card-p" style="padding-bottom:6px"><h3>Neueste Anmeldungen</h3></div>
+        <div style="padding:0 8px 8px">
+          <div class="row" style="padding:11px 13px;border-bottom:1px solid var(--border)"><span class="dot"></span><div><div style="font-weight:550;font-size:14px">Maria Musterfrau</div><div class="muted tiny">Discofox · vor 12 Min.</div></div></div>
+          <div class="row" style="padding:11px 13px;border-bottom:1px solid var(--border)"><span class="dot"></span><div><div style="font-weight:550;font-size:14px">Jonas Klein</div><div class="muted tiny">WCS Probe-Block · vor 1 Std.</div></div></div>
+          <div class="row" style="padding:11px 13px"><span class="dot"></span><div><div style="font-weight:550;font-size:14px">Aylin Demir</div><div class="muted tiny">Grundkurs · vor 3 Std.</div></div></div>
+        </div>
+        <div class="card-p" style="padding-top:8px"><a class="btn btn-secondary btn-sm btn-block" data-go="schule-teilnehmer">Alle Teilnehmer</a></div></div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S6 KURS ANLEGEN ============ -->
+<section class="screen" id="screen-schule-kurs">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
+    <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item active" data-go="schule-kurs">✎ Kurse</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Neuer Schnupperkurs</h1><p class="muted" style="margin:4px 0 0">Kurs + Termine anlegen – danach sofort auf der Buchungsseite sichtbar.</p></div>
+      <a class="btn btn-ghost" data-go="schule-dash">Abbrechen</a></div>
+    <div class="steps"><div class="step active"><span class="num">1</span> Grunddaten</div><div class="step-line"></div>
+      <div class="step active"><span class="num">2</span> Termine</div><div class="step-line"></div>
+      <div class="step"><span class="num">3</span> Veröffentlichen</div></div>
+    <div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start">
+      <div class="col gap-24">
+        <div class="card card-p"><h3 style="margin-bottom:16px">Grunddaten</h3>
+          <div class="field"><label class="label">Kurstitel</label><input class="input" value="Discofox Schnupperstunde"></div>
+          <div class="grid grid-2"><div class="field"><label class="label">Tanzstil</label><select class="select"><option>Discofox</option><option>Salsa</option><option>West Coast Swing</option></select></div>
+            <div class="field"><label class="label">Level</label><select class="select"><option>Anfänger</option><option>Fortgeschritten</option></select></div></div>
+          <div class="field"><label class="label">Beschreibung</label><textarea class="textarea">Lockere Schnupperstunde für Einsteiger – Grundschritte, Drehungen, erste Figuren.</textarea></div>
+          <div class="grid grid-2"><div class="field"><label class="label">Was mitbringen</label><input class="input" value="Bequeme Kleidung, saubere Schuhe"></div>
+            <div class="field"><label class="label">Ort / Raum</label><input class="input" value="Saal 1"></div></div>
+          <div class="field" style="margin:0"><label class="label">Kursbild <span class="muted">(optional · Header-Hintergrund auf der Kursseite)</span></label>
+            <div class="row" style="gap:12px;align-items:center">
+              <div class="course-photo" style="width:96px;height:60px;border-radius:10px;flex:0 0 auto"></div>
+              <div class="dashed" style="flex:1;cursor:pointer;text-align:left">⬆ Bild wählen oder hierher ziehen · JPG/PNG, quer (z. B. 1600×600)</div>
+            </div>
+            <p class="muted tiny" style="margin:6px 0 0">Liegt hinter Chips & Titel auf der Kurs-Landingpage. <b>Ohne Bild</b> bleibt der farbige Akzent-Verlauf – kompakt, kein leerer Bildbereich.</p></div></div>
+        <div class="card card-p"><h3 style="margin-bottom:4px">Tags</h3>
+          <p class="muted tiny" style="margin:0 0 12px">Erscheinen als Chips über dem Kurstitel auf der Buchungsseite. Gelten für den ganzen Kurs.</p>
+          <div class="chips" id="courseChips">
+            <span class="chip chip-accent">Discofox<button type="button" class="chip-x" onclick="delCourseChip(this)">×</button></span>
+            <span class="chip">Anfänger<button type="button" class="chip-x" onclick="delCourseChip(this)">×</button></span>
+            <span class="chip">Kein Partner nötig<button type="button" class="chip-x" onclick="delCourseChip(this)">×</button></span>
+          </div>
+          <div class="row mt-16" style="gap:8px">
+            <input class="input" id="courseChipInput" placeholder="Eigenen Tag eingeben …" onkeydown="if(event.key==='Enter'){event.preventDefault();addCourseChip()}">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="addCourseChip()">+ Hinzufügen</button>
+          </div>
+          <div class="mt-16">
+            <div class="tiny muted" style="margin-bottom:7px">Aus Tag-Katalog wählen — <b style="color:var(--text)">Global</b> <span class="muted">(von Agentur, für alle Schulen)</span></div>
+            <div class="chips" id="courseQuickGlobal"></div>
+            <div class="tiny muted" style="margin:14px 0 7px"><b style="color:var(--text)">Eigene</b> <span class="muted">(nur diese Schule · in den Einstellungen verwaltbar)</span></div>
+            <div class="chips" id="courseQuickLocal"></div>
+          </div></div>
+        <div class="card card-p"><h3 style="margin-bottom:4px">Kurs-Modell</h3>
+          <p class="muted tiny" style="margin:0 0 14px">Wie oft findet diese Schnupperstunde statt?</p>
+          <div class="grid grid-3" id="model">
+            <label class="term" onclick="setModel(this,'single')"><div><div style="font-weight:650">Einzeltermin</div><div class="muted tiny">Einmalig</div></div><span class="badge">wählen</span></label>
+            <label class="term selected" onclick="setModel(this,'series')"><div><div style="font-weight:650">↻ Serie</div><div class="muted tiny">Wiederkehrend</div></div><span class="badge badge-green">gewählt</span></label>
+            <label class="term" onclick="setModel(this,'block')"><div><div style="font-weight:650">Probe-Block</div><div class="muted tiny">Paket</div></div><span class="badge">wählen</span></label></div></div>
+
+        <div class="card card-p" id="seriesBuilder">
+          <div class="between" style="margin-bottom:4px"><h3>Serie / Wiederholung</h3><span class="badge badge-accent">↻ wiederkehrend</span></div>
+          <p class="muted tiny" style="margin:0 0 16px">Einmal anlegen – das System erzeugt alle Termine automatisch. Jeder Termin hat eigene Plätze & Teilnehmerliste. Kein manuelles Nachtragen mehr.</p>
+          <div class="grid grid-2">
+            <div class="field"><label class="label">Erster Termin</label><input type="date" class="input" id="serStart" value="2026-06-16"></div>
+            <div class="field"><label class="label">Uhrzeit</label><input type="time" class="input" id="serTime" value="19:00"></div>
+          </div>
+          <div class="grid grid-3">
+            <div class="field"><label class="label">Dauer</label><select class="select" id="serDur"><option>60 Min</option><option>45 Min</option><option>90 Min</option></select></div>
+            <div class="field"><label class="label">Wiederholen</label><select class="select" id="serUnit" onchange="serUnitChange()"><option value="day">Täglich</option><option value="week" selected>Wöchentlich</option><option value="month">Monatlich</option></select></div>
+            <div class="field"><label class="label">Plätze / Termin</label><input class="input" id="serSeats" value="12"></div>
+          </div>
+          <div class="field"><label class="label">Intervall</label>
+            <div class="row" style="gap:8px;align-items:center"><span class="small muted">alle</span><input type="number" min="1" class="input" id="serInterval" value="1" style="max-width:80px;padding:8px 10px"><span class="small" id="serUnitLabel">Woche(n)</span></div></div>
+          <div class="field" id="serWeekdays"><label class="label">An welchen Wochentagen?</label>
+            <div class="chips">
+              <span class="chip chip-ghost wd" data-d="1" onclick="toggleWd(this)">Mo</span>
+              <span class="chip chip-ghost wd" data-d="2" onclick="toggleWd(this)">Di</span>
+              <span class="chip chip-ghost wd" data-d="3" onclick="toggleWd(this)">Mi</span>
+              <span class="chip chip-ghost wd" data-d="4" onclick="toggleWd(this)">Do</span>
+              <span class="chip chip-ghost wd" data-d="5" onclick="toggleWd(this)">Fr</span>
+              <span class="chip chip-ghost wd" data-d="6" onclick="toggleWd(this)">Sa</span>
+              <span class="chip chip-ghost wd" data-d="0" onclick="toggleWd(this)">So</span>
+            </div></div>
+          <div class="field" id="serMonthOpt" style="display:none"><label class="label">Monatlich wiederholen</label>
+            <select class="select" id="serMonthMode"><option value="date">am Tag des Monats (z. B. immer am 16.)</option><option value="weekday">am gleichen Wochentag (z. B. jeden 3. Dienstag)</option></select></div>
+          <label class="label">Ende der Serie</label>
+          <div class="grid grid-2" id="serEnd">
+            <label class="term selected" onclick="serEndMode(this,'count')"><div style="font-weight:550">Nach Anzahl</div><input class="input" id="serCount" value="8" style="max-width:78px;padding:6px 10px" onclick="event.stopPropagation()"></label>
+            <label class="term" onclick="serEndMode(this,'date')"><div style="font-weight:550">Bis Datum</div><input type="date" class="input" id="serUntil" value="2026-08-31" style="padding:6px 10px" onclick="event.stopPropagation()"></label>
+          </div>
+          <button type="button" class="btn btn-primary btn-block mt-16" onclick="generateSeries()">↻ Termine erzeugen</button>
+        </div>
+
+        <div class="card card-p"><div class="between" style="margin-bottom:6px"><h3>Termine <span class="muted small" id="termCount">(0)</span></h3><button type="button" class="btn btn-secondary btn-sm" onclick="addEmptyTerm()">+ Termin</button></div>
+          <p class="muted tiny" style="margin:0 0 14px">Automatisch aus der Serie erzeugt. Einzelne Termine kannst du anpassen, löschen oder ihnen eigene Tags geben.</p>
+          <table class="table"><thead><tr><th>Datum</th><th>Uhrzeit</th><th>Plätze</th><th>Tags</th><th></th></tr></thead><tbody id="termRows"></tbody></table></div>
+
+        <div class="card card-p"><div class="between" style="margin-bottom:4px"><h3>Reminder für diesen Kurs</h3>
+            <label class="checkbox" style="align-items:center;margin:0"><input type="checkbox" id="remCourseUseSchool" onchange="toggleRemCourse(this)"><span>Schul-Standard verwenden</span></label></div>
+          <p class="muted tiny" id="remCourseHint" style="margin:0 0 14px"></p>
+          <div id="remCourseList"></div>
+          <button type="button" class="btn btn-secondary btn-sm" id="remCourseAdd" onclick="addReminder('course')">+ Reminder</button></div>
+        <div class="row" style="justify-content:flex-end;gap:8px"><button class="btn btn-secondary">Entwurf speichern</button><a class="btn btn-primary" data-go="schule-dash">Veröffentlichen →</a></div>
+      </div>
+      <div class="card card-p" style="position:sticky;top:24px">
+        <div class="tiny muted" style="text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Vorschau Buchungsseite</div>
+        <div class="card" style="box-shadow:none;overflow:hidden">
+          <div class="hero-photo course-photo" style="padding:14px 16px">
+            <div class="row wrap" id="kursPreviewChips"><span class="badge badge-accent">Discofox</span><span class="badge">Anfänger</span><span class="badge">Kein Partner nötig</span></div>
+            <h3 class="mt-8" style="font-size:16px">Discofox Schnupperstunde</h3><div class="muted small">Di · 16.06.2026 · 19:00–20:00</div>
+          </div>
+          <div class="card-p" style="padding-top:12px">
+            <div class="row"><span class="dot"></span><span class="small">12 Plätze frei</span></div>
+            <span class="btn btn-primary btn-sm btn-block mt-8">Ansehen & buchen</span></div></div>
+        <p class="muted tiny mt-8" style="text-align:center">Bild hinter Chips & Titel — so sehen Interessenten den Kurs.</p></div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S7 TEILNEHMER ============ -->
+<section class="screen" id="screen-schule-teilnehmer">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
+    <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
+    <a class="nav-item active" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><a class="muted small" data-go="schule-dash">← Termine</a>
+      <h1 class="mt-8">Discofox Schnupperstunde</h1><p class="muted" style="margin:4px 0 0">Di · 16.06.2026 · 19:00–20:00 · Saal 1</p></div>
+      <div class="row"><button class="btn btn-secondary">⤓ CSV-Export</button><button class="btn btn-primary">+ Manuell</button></div></div>
+    <div class="row wrap" style="gap:8px;margin-bottom:16px">
+      <span class="badge badge-amber">8 / 12 belegt</span><span class="badge badge-green">6 angemeldet</span><span class="badge badge-blue">2 erschienen</span><span class="badge">0 konvertiert</span></div>
+    <div class="card"><table class="table"><thead><tr><th>Name</th><th>Kontakt</th><th>Angemeldet</th><th>Status</th><th>Aktion</th></tr></thead><tbody>
+      <tr><td><b>Maria Musterfrau</b></td><td class="muted small">maria@example.de<br>0151 23456789</td><td class="small">vor 12 Min.</td><td><span class="badge badge-green">angemeldet</span></td><td><button class="btn btn-secondary btn-sm">→ erschienen</button></td></tr>
+      <tr><td><b>Thomas Berger</b><div class="muted tiny">+ Partnerin</div></td><td class="muted small">t.berger@example.de<br>0160 1112223</td><td class="small">gestern</td><td><span class="badge badge-blue">erschienen</span></td><td><button class="btn btn-secondary btn-sm">→ konvertiert</button></td></tr>
+      <tr><td><b>Lena Hofmann</b></td><td class="muted small">lena.h@example.de</td><td class="small">vor 2 Tagen</td><td><span class="badge badge-green">angemeldet</span></td><td><button class="btn btn-secondary btn-sm">→ erschienen</button></td></tr>
+      <tr><td><b>Murat Yıldız</b><div class="muted tiny">📞 telefonisch</div></td><td class="muted small">0157 9988776</td><td class="small">vor 2 Tagen</td><td><span class="badge badge-blue">erschienen</span></td><td><button class="btn btn-secondary btn-sm">→ konvertiert</button></td></tr>
+      <tr><td><b>Sophie Wagner</b></td><td class="muted small">sophie.w@example.de</td><td class="small">vor 3 Tagen</td><td><span class="badge badge-green">angemeldet</span></td><td><button class="btn btn-secondary btn-sm">→ erschienen</button></td></tr>
+    </tbody></table></div>
+    <p class="muted tiny mt-16">Funnel: <b>angemeldet</b> → <b>erschienen</b> → <b>konvertiert</b> (hat den vollen Kurs gebucht).</p>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S7c TEAM / ROLLEN ============ -->
+<section class="screen" id="screen-schule-team">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
+    <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item active" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Team</h1><p class="muted" style="margin:4px 0 0">Mehrere Admins mit unterschiedlichen Rechten – verwalte, wer was darf.</p></div></div>
+
+    <div class="card" style="margin-bottom:24px"><div class="card-p" style="padding-bottom:6px"><h3>Mitglieder</h3></div>
+      <table class="table"><thead><tr><th>Name</th><th>E-Mail</th><th>Rolle</th><th>Status</th><th></th></tr></thead><tbody>
+        <tr><td><b>Anna Schritt</b><div class="muted tiny">du</div></td><td class="muted small">anna@schrittwerk.de</td>
+          <td><select class="select" style="min-width:128px"><option selected>Superadmin</option><option>Admin</option><option>Reader</option></select></td>
+          <td><span class="badge badge-green">aktiv</span></td><td><button class="btn btn-ghost btn-sm" disabled style="opacity:.4">✕</button></td></tr>
+        <tr><td><b>Tom Berger</b></td><td class="muted small">tom@schrittwerk.de</td>
+          <td><select class="select" style="min-width:128px"><option>Superadmin</option><option selected>Admin</option><option>Reader</option></select></td>
+          <td><span class="badge badge-green">aktiv</span></td><td><button class="btn btn-ghost btn-sm" onclick="this.closest('tr').remove()">✕</button></td></tr>
+        <tr><td><b>Lisa Klein</b></td><td class="muted small">lisa@schrittwerk.de</td>
+          <td><select class="select" style="min-width:128px"><option>Superadmin</option><option>Admin</option><option selected>Reader</option></select></td>
+          <td><span class="badge badge-amber">eingeladen</span></td><td><button class="btn btn-ghost btn-sm" onclick="this.closest('tr').remove()">✕</button></td></tr>
+      </tbody></table></div>
+
+    <div class="card card-p" style="max-width:760px"><div class="between" style="margin-bottom:4px"><h3>Mitglied einladen</h3></div>
+      <p class="muted tiny" style="margin:0 0 14px">Person hinzufügen, Rolle wählen – bekommt eine Einladungsmail.</p>
+      <div id="teamInvite"></div>
+      <button type="button" class="btn btn-secondary btn-sm" onclick="addInviteRow('teamInvite')">+ Weitere Person</button>
+      <div class="dashed mt-16" style="text-align:left;line-height:1.8">
+        <b>🛡 Superadmin</b> – volle Kontrolle: Kurse, Teilnehmer, Team, Look & Einstellungen<br>
+        <b>✎ Admin</b> – Kurse & Anmeldungen verwalten (kein Team/Einstellungen)<br>
+        <b>👁 Reader</b> – nur ansehen, nichts ändern</div>
+      <div class="row mt-16" style="justify-content:flex-end"><button type="button" class="btn btn-primary" onclick="alert('Einladungen versendet (Prototyp)')">Einladungen senden</button></div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S7d SCHULE · VORLAGEN ============ -->
+<section class="screen" id="screen-schule-vorlagen">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
+    <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item active" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Vorlagen</h1><p class="muted" style="margin:4px 0 0">Eigene Nachrichten-Vorlagen für deine Reminder – E-Mail (HTML), SMS, WhatsApp, Anruf.</p></div>
+      <button type="button" class="btn btn-primary" onclick="openTemplate(null,'school')">+ Neue Vorlage</button></div>
+    <div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start;max-width:1000px">
+      <div class="col gap-24">
+        <div class="card card-p">
+          <h3 style="margin-bottom:4px">Eigene Vorlagen dieser Schule</h3>
+          <p class="muted tiny" style="margin:0 0 14px">Anlegen, bearbeiten, löschen – nur für Schrittwerk. In jedem Reminder dieser Schule auswählbar.</p>
+          <div id="tplSchoolLocalList"></div>
+          <button type="button" class="btn btn-secondary btn-sm mt-8" onclick="openTemplate(null,'school')">+ Neue Vorlage</button>
+        </div>
+        <div class="card card-p">
+          <h3 style="margin-bottom:4px">🌐 Globale Vorlagen <span class="muted small" style="font-weight:400">(von Agentur)</span></h3>
+          <p class="muted tiny" style="margin:0 0 14px">Stehen allen Schulen zur Verfügung. Hier nur ansehen – ändern kann sie die Agentur. Du kannst eine Kopie als eigene Vorlage anlegen.</p>
+          <div id="tplSchoolGlobalList"></div>
+        </div>
+      </div>
+      <div class="card card-p" style="position:sticky;top:24px;background:var(--muted-2)">
+        <h3>Platzhalter</h3>
+        <p class="muted tiny" style="margin:4px 0 10px">Werden beim Versand automatisch ersetzt:</p>
+        <div class="chips">
+          <span class="chip">{{teilnehmer_name}}</span><span class="chip">{{kurs_titel}}</span><span class="chip">{{termin_datum}}</span>
+          <span class="chip">{{termin_uhrzeit}}</span><span class="chip">{{ort}}</span><span class="chip">{{mitbringen}}</span>
+          <span class="chip">{{schule_name}}</span><span class="chip">{{storno_link}}</span>
+        </div>
+        <div class="notice mt-16">E-Mail wird als HTML bearbeitet (visuell oder Code), SMS/WhatsApp/Anruf als Text.</div>
+      </div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S7b EINSTELLUNGEN / LOOK ============ -->
+<section class="screen" id="screen-schule-einstellungen">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
+    <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item active" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Einstellungen</h1><p class="muted" style="margin:4px 0 0">Bring deine Buchungsseite in deinen Look – Farbe und Logo bestimmst du selbst.</p></div>
+      <button class="btn btn-primary" onclick="saveLook()">Look speichern</button></div>
+
+    <div class="grid" style="grid-template-columns:1.4fr 1fr;align-items:start">
+      <div class="col gap-24">
+
+        <div class="card card-p"><h3 style="margin-bottom:4px">Akzentfarbe</h3>
+          <p class="muted tiny" style="margin:0 0 14px">Bestimmt Buttons, Badges, Links und Hero – auf der ganzen Buchungsseite und im Backend.</p>
+          <div class="row wrap" id="swatches" style="gap:10px">
+            <button class="swatch active" data-color="#dc2626" onclick="pickSwatch(this)" style="--sw:#dc2626" title="Rot"></button>
+            <button class="swatch" data-color="#e11d48" onclick="pickSwatch(this)" style="--sw:#e11d48" title="Rosé"></button>
+            <button class="swatch" data-color="#ea580c" onclick="pickSwatch(this)" style="--sw:#ea580c" title="Orange"></button>
+            <button class="swatch" data-color="#d97706" onclick="pickSwatch(this)" style="--sw:#d97706" title="Amber"></button>
+            <button class="swatch" data-color="#16a34a" onclick="pickSwatch(this)" style="--sw:#16a34a" title="Grün"></button>
+            <button class="swatch" data-color="#0891b2" onclick="pickSwatch(this)" style="--sw:#0891b2" title="Cyan"></button>
+            <button class="swatch" data-color="#2563eb" onclick="pickSwatch(this)" style="--sw:#2563eb" title="Blau"></button>
+            <button class="swatch" data-color="#4f46e5" onclick="pickSwatch(this)" style="--sw:#4f46e5" title="Indigo"></button>
+            <button class="swatch" data-color="#7c3aed" onclick="pickSwatch(this)" style="--sw:#7c3aed" title="Violett"></button>
+            <button class="swatch" data-color="#db2777" onclick="pickSwatch(this)" style="--sw:#db2777" title="Pink"></button>
+          </div>
+          <div class="row mt-16" style="gap:12px;align-items:center">
+            <label class="label" style="margin:0">Eigene Farbe</label>
+            <input type="color" id="colorInput" value="#dc2626" oninput="applyTheme(this.value);syncSwatch(this.value)" style="width:46px;height:34px;border:1px solid var(--border);border-radius:8px;background:var(--bg);padding:2px;cursor:pointer">
+            <span class="mono small muted" id="colorHex">#dc2626</span>
+          </div>
+        </div>
+
+        <div class="card card-p"><h3 style="margin-bottom:16px">Logo & Name</h3>
+          <div class="grid grid-2">
+            <div class="field"><label class="label">Name der Tanzschule</label><input class="input" value="Tanzschule Schrittwerk"></div>
+            <div class="field"><label class="label">Logo-Kürzel</label><input class="input" id="kuerzelInput" value="SW" maxlength="3" oninput="setKuerzel(this.value)" style="max-width:120px;text-transform:uppercase"></div>
+          </div>
+          <div class="field"><label class="label">Logo-Bild <span class="muted">(optional)</span></label><div class="dashed" style="cursor:pointer">⬆ Datei wählen oder hierher ziehen – sonst wird das Kürzel verwendet</div></div>
+        </div>
+
+        <div class="card card-p"><h3 style="margin-bottom:4px">Tags</h3>
+          <p class="muted tiny" style="margin:0 0 14px">Wiederverwendbare Chips für deine Kurse (Kurs-Tags). Globale kommen von der Agentur und gelten für alle Schulen.</p>
+          <div class="tiny muted" style="margin-bottom:7px">🌐 Global <span class="muted">(von Agentur – hier nicht änderbar)</span></div>
+          <div class="chips" id="inheritedMerkmaleList"></div>
+          <hr class="hr">
+          <div class="tiny muted" style="margin-bottom:7px">🏫 Eigene Tags dieser Schule</div>
+          <div class="chips" id="localMerkmaleList"></div>
+          <div class="row mt-16" style="gap:8px">
+            <input class="input" id="localMerkmalInput" placeholder="Eigenen Tag anlegen …" onkeydown="if(event.key==='Enter'){event.preventDefault();addMerkmal('local')}">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="addMerkmal('local')">+ Hinzufügen</button>
+          </div>
+        </div>
+
+        <div class="card card-p"><div class="between" style="margin-bottom:4px"><h3>Reminder-Standard</h3>
+            <label class="checkbox" style="align-items:center;margin:0"><input type="checkbox" id="remSchoolUseAgency" onchange="toggleRemSchool(this)"><span>Agentur-Standard verwenden</span></label></div>
+          <p class="muted tiny" id="remSchoolHint" style="margin:0 0 14px"></p>
+          <div id="remSchoolList"></div>
+          <button type="button" class="btn btn-secondary btn-sm" id="remSchoolAdd" onclick="addReminder('school')">+ Reminder</button>
+          <p class="muted tiny mt-12">Gilt als Standard für alle Kurse dieser Schule. Einzelne Kurse können davon abweichen.</p>
+        </div>
+
+        <div class="card card-p"><div class="between"><div><h3 style="margin-bottom:4px">Vorlagen</h3>
+            <p class="muted tiny" style="margin:0">Nachrichten-Vorlagen für deine Reminder verwaltest du auf einer eigenen Seite.</p></div>
+            <a class="btn btn-secondary btn-sm" data-go="schule-vorlagen">Zu den Vorlagen →</a></div></div>
+
+        <div class="card card-p"><h3 style="margin-bottom:4px">Absender (Versand-Identität)</h3>
+          <p class="muted tiny" style="margin:0 0 14px">Wie deine Reminder bei den Teilnehmern ankommen – pro Kanal.</p>
+          <div class="tiny muted" style="margin-bottom:8px">✉ E-Mail</div>
+          <div class="grid grid-2">
+            <div class="field"><label class="label">Absendername</label><input class="input" value="Tanzschule Schrittwerk" oninput="setSender('fromName',this.value)"></div>
+            <div class="field"><label class="label">Antwort-Adresse (Reply-To)</label><input class="input" type="email" value="info@schrittwerk.de" oninput="setSender('replyTo',this.value)"></div>
+          </div>
+          <div class="field"><label class="label">Absende-Adresse</label>
+            <div class="row" style="gap:8px;align-items:center"><input class="input" value="kurse@schrittwerk.book2dance.de" oninput="setSender('fromEmail',this.value)"><span class="badge badge-green">✓ verifiziert</span></div>
+            <p class="muted tiny" style="margin:6px 0 0">Eigene Domain? Für beste Zustellbarkeit SPF/DKIM/DMARC einrichten (DNS) – wird dann hier verifiziert.</p></div>
+          <hr class="hr">
+          <div class="grid grid-2">
+            <div class="field" style="margin:0"><label class="label">💬 SMS-Absenderkennung</label><input class="input" value="Schrittwerk" maxlength="11" oninput="setSender('smsSender',this.value)"><p class="muted tiny" style="margin:6px 0 0">Max. 11 Zeichen (alphanumerische Sender-ID).</p></div>
+            <div class="field" style="margin:0"><label class="label">🟢 WhatsApp / 📞 Anruf</label><div class="row" style="gap:8px;align-items:center;margin-top:2px"><span class="badge badge-green">WhatsApp Business verbunden</span></div><p class="muted tiny" style="margin:6px 0 0">SMS, WhatsApp & Anruf laufen zentral über den Telefonie-Anbieter von Book2Dance.</p></div>
+          </div>
+        </div>
+
+        <div class="card card-p"><h3 style="margin-bottom:4px">E-Mail-Versand</h3>
+          <p class="muted tiny" style="margin:0 0 14px">Worüber deine E-Mails technisch verschickt werden.</p>
+          <div class="grid grid-2" id="sendMode">
+            <label class="term selected" onclick="setSendMode(this,'managed')"><div><div style="font-weight:650">Über Book2Dance</div><div class="muted tiny">Verwalteter Versand (empfohlen)</div></div><span class="badge badge-green">aktiv</span></label>
+            <label class="term" onclick="setSendMode(this,'own')"><div><div style="font-weight:650">Eigener SMTP / ESP</div><div class="muted tiny">Eigener Mailserver</div></div><span class="badge">wählen</span></label>
+          </div>
+          <div id="sendManaged" class="mt-16">
+            <div class="between" style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;background:var(--muted-2)">
+              <div><div style="font-weight:550;font-size:14px">Domain-Authentifizierung (DKIM/SPF)</div><div class="muted tiny mono">schrittwerk.book2dance.de</div></div>
+              <span class="badge badge-green">✓ authentifiziert</span></div>
+            <p class="muted tiny mt-8">Wir versenden über den zentralen, geprüften Book2Dance-Mailserver. Deine (Sub-)Domain ist signiert, damit Mails von <b>dir</b> kommen und sicher ankommen. Eigene Domain nutzen? DNS-Einträge hinterlegen → wird hier verifiziert.</p>
+          </div>
+          <div id="sendOwn" class="mt-16" style="display:none">
+            <div class="grid grid-2">
+              <div class="field" style="margin:0"><label class="label">SMTP-Host</label><input class="input" placeholder="smtp.deinedomain.de"></div>
+              <div class="field" style="margin:0"><label class="label">Port</label><input class="input" placeholder="587" style="max-width:120px"></div>
+            </div>
+            <div class="grid grid-2 mt-16">
+              <div class="field" style="margin:0"><label class="label">Benutzer</label><input class="input" placeholder="mail@deinedomain.de"></div>
+              <div class="field" style="margin:0"><label class="label">Passwort</label><input class="input" type="password" placeholder="••••••••"></div>
+            </div>
+            <div class="field mt-16" style="margin:0"><label class="label">Verschlüsselung</label><select class="select" style="max-width:200px"><option>STARTTLS</option><option>SSL/TLS</option><option>keine</option></select></div>
+            <div class="row mt-16" style="gap:8px"><button type="button" class="btn btn-secondary btn-sm" onclick="alert('Testverbindung erfolgreich (Prototyp)')">Verbindung testen</button></div>
+            <p class="muted tiny mt-8">Deine Mails laufen dann über deinen eigenen Server – Zustellbarkeit & Reputation verantwortest du selbst.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- LIVE PREVIEW -->
+      <div class="card card-p" style="position:sticky;top:24px">
+        <div class="tiny muted" style="text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Live-Vorschau · Buchungsseite</div>
+        <div class="surface" style="box-shadow:none;border-radius:14px">
+          <div class="pubtop" style="position:static;border-radius:14px 14px 0 0">
+            <div class="logo sm school-logo">SW</div>
+            <div><div style="font-weight:600;font-size:13px">Tanzschule Schrittwerk</div><div class="muted tiny">Schnupperkurse buchen</div></div>
+          </div>
+          <div class="hero" style="border-radius:0"><div style="padding:18px 16px">
+            <span class="badge badge-accent">Unverbindlich</span>
+            <h3 class="mt-8" style="font-size:18px">Finde deinen Tanzkurs</h3>
+          </div></div>
+          <div style="padding:14px 16px">
+            <div class="card card-p" style="box-shadow:none">
+              <div class="row wrap"><span class="badge badge-accent">Discofox</span><span class="badge">Anfänger</span></div>
+              <h3 class="mt-8" style="font-size:15px">Discofox Schnupperstunde</h3>
+              <div class="muted small">Di · 16.06.2026 · 19:00</div>
+              <div class="row mt-8"><span class="dot"></span><span class="small">4 Plätze frei</span></div>
+              <span class="btn btn-primary btn-sm btn-block mt-8">Ansehen & buchen</span>
+            </div>
+          </div>
+        </div>
+        <p class="muted tiny mt-8" style="text-align:center">Änderungen sind sofort sichtbar – auch im restlichen Prototyp.</p>
+      </div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S8 AGENTUR ÜBERSICHT ============ -->
+<section class="screen" id="screen-agentur">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
+    <a class="nav-item active" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a>
+    <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Tanzschulen</h1><p class="muted" style="margin:4px 0 0">Alle betreuten Schulen & ihre Buchungsseiten an einem Ort.</p></div>
+      <a class="btn btn-primary" data-go="agentur-neu">+ Schule anlegen</a></div>
+    <div class="grid grid-4">
+      <div class="card stat"><div class="n">12</div><div class="l">Betreute Schulen</div></div>
+      <div class="card stat"><div class="n">47</div><div class="l">Aktive Kurse</div></div>
+      <div class="card stat"><div class="n">312</div><div class="l">Buchungen (30 T.)</div></div>
+      <div class="card stat"><div class="n" style="color:var(--green)">+18%</div><div class="l">ggü. Vormonat</div></div>
+    </div>
+    <h3 class="mt-24 muted" style="font-weight:550;margin-bottom:8px">Alle Schulen</h3>
+    <div class="grid grid-3">
+      <a class="card card-p card-hover col" data-go="schule-dash"><div class="between"><div class="logo sm school-logo">SW</div><span class="badge badge-green"><span class="dot"></span> aktiv</span></div>
+        <h3 class="mt-8">Tanzschule Schrittwerk</h3><div class="muted small">Rosenheim</div><hr class="hr" style="margin:12px 0"><div class="between small"><span class="muted">5 Kurse</span><span class="muted">38 Buchungen</span></div></a>
+      <a class="card card-p card-hover col" data-go="schule-dash"><div class="between"><div class="logo sm" style="background:linear-gradient(135deg,#7c3aed,#db2777)">TB</div><span class="badge badge-green"><span class="dot"></span> aktiv</span></div>
+        <h3 class="mt-8">Tanzhaus Bergmann</h3><div class="muted small">München</div><hr class="hr" style="margin:12px 0"><div class="between small"><span class="muted">8 Kurse</span><span class="muted">94 Buchungen</span></div></a>
+      <a class="card card-p card-hover col" data-go="schule-dash"><div class="between"><div class="logo sm" style="background:linear-gradient(135deg,#db2777,#f59e0b)">RA</div><span class="badge badge-green"><span class="dot"></span> aktiv</span></div>
+        <h3 class="mt-8">Rhythm Academy</h3><div class="muted small">Salzburg</div><hr class="hr" style="margin:12px 0"><div class="between small"><span class="muted">6 Kurse</span><span class="muted">51 Buchungen</span></div></a>
+      <a class="card card-p card-hover col" data-go="schule-dash"><div class="between"><div class="logo sm" style="background:linear-gradient(135deg,#0891b2,#16a34a)">MV</div><span class="badge badge-green"><span class="dot"></span> aktiv</span></div>
+        <h3 class="mt-8">Move & Vibe</h3><div class="muted small">Innsbruck</div><hr class="hr" style="margin:12px 0"><div class="between small"><span class="muted">4 Kurse</span><span class="muted">29 Buchungen</span></div></a>
+      <a class="card card-p card-hover col" data-go="schule-dash"><div class="between"><div class="logo sm" style="background:linear-gradient(135deg,#ca8a04,#dc2626)">SD</div><span class="badge badge-amber">Onboarding</span></div>
+        <h3 class="mt-8">Studio Danza</h3><div class="muted small">Wien</div><hr class="hr" style="margin:12px 0"><div class="between small"><span class="muted">0 Kurse</span><span class="muted">—</span></div></a>
+      <a class="card card-p card-hover col" data-go="agentur-neu" style="border-style:dashed;align-items:center;justify-content:center;text-align:center;color:var(--muted-text)">
+        <div style="font-size:26px">+</div><div class="small">Weitere Schule anlegen</div></a>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S9 SCHULE ANLEGEN ============ -->
+<section class="screen" id="screen-agentur-neu">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
+    <a class="nav-item active" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a>
+    <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="page-head"><a class="muted small" data-go="agentur">← Alle Schulen</a>
+      <h1 class="mt-8">Neue Tanzschule anlegen</h1><p class="muted" style="margin:4px 0 0">Mandant anlegen, Admin einladen – Buchungsseite wird automatisch erstellt.</p></div>
+    <div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start;max-width:980px">
+      <form class="col gap-24" onsubmit="event.preventDefault();go('agentur')">
+        <div class="card card-p"><h3 style="margin-bottom:16px">Stammdaten</h3>
+          <div class="field"><label class="label">Name der Tanzschule</label><input class="input" placeholder="Tanzschule Schrittwerk" required></div>
+          <div class="grid grid-2"><div class="field"><label class="label">Standort / Stadt</label><input class="input" placeholder="Rosenheim"></div>
+            <div class="field"><label class="label">Kürzel (Logo)</label><input class="input" placeholder="SW" maxlength="3" style="max-width:120px"></div></div>
+          <div class="field"><label class="label">Logo</label><div class="dashed" style="cursor:pointer">⬆ Datei wählen oder hierher ziehen</div></div>
+          <div class="field"><label class="label">Buchungsseiten-URL</label>
+            <div class="row" style="gap:0"><span class="input mono" style="border-right:none;border-radius:10px 0 0 10px;background:var(--muted);color:var(--muted-text);width:auto;white-space:nowrap">book2dance.de/</span>
+              <input class="input mono" value="schrittwerk" style="border-radius:0 10px 10px 0"></div></div></div>
+        <div class="card card-p"><div class="between" style="margin-bottom:4px"><h3>Schul-Admins einladen</h3><span class="badge">mehrere möglich</span></div>
+          <p class="muted tiny" style="margin:0 0 14px">Lade eine oder mehrere Personen ein – jede mit eigener Rolle. Alle bekommen eine Einladungsmail.</p>
+          <div id="inviteList"></div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="addInviteRow('inviteList')">+ Person hinzufügen</button>
+          <div class="dashed mt-16" style="text-align:left;line-height:1.7"><b>Rollen:</b> <b>Superadmin</b> – volle Kontrolle inkl. Team & Einstellungen · <b>Admin</b> – Kurse & Anmeldungen verwalten · <b>Reader</b> – nur ansehen</div>
+          <label class="checkbox mt-12"><input type="checkbox" checked style="margin-top:2px"><span>Einladungsmails sofort senden</span></label></div>
+        <div class="row" style="justify-content:flex-end;gap:8px"><a class="btn btn-ghost" data-go="agentur">Abbrechen</a><button class="btn btn-primary" type="submit">Anlegen & einladen</button></div>
+      </form>
+      <div class="card card-p" style="position:sticky;top:24px;background:var(--muted-2)">
+        <h3>Was danach passiert</h3>
+        <ol class="muted small mt-8" style="margin:0;padding-left:18px;line-height:2">
+          <li>Mandant wird angelegt</li><li>Buchungsseiten-URL ist live</li><li>Schul-Admin bekommt Einladung</li><li>Schule legt eigene Kurse an</li></ol>
+        <div class="notice mt-16">Branding (Farben, Logo) stellt jede Schule selbst unter <b>Einstellungen</b> ein.</div></div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S10 AGENTUR · GLOBALE MERKMALE ============ -->
+<section class="screen" id="screen-agentur-merkmale">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
+    <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
+    <a class="nav-item active" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a>
+    <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Tags</h1><p class="muted" style="margin:4px 0 0">Zentrale Tag-Kataloge für alle betreuten Tanzschulen.</p></div></div>
+    <div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start;max-width:1000px">
+      <div class="card card-p">
+        <div class="between" style="margin-bottom:4px"><h3>Kurs-Tags · Katalog</h3><span class="badge badge-accent">Kurse</span></div>
+        <p class="muted tiny" style="margin:0 0 14px">Chips, die Schulen an ihre Kurse setzen können – ohne sie selbst zu pflegen. (Weitere Tag-Kataloge folgen.)</p>
+        <div class="chips" id="globalMerkmaleList"></div>
+        <div class="row mt-16" style="gap:8px">
+          <input class="input" id="globalMerkmalInput" placeholder="Neuen Kurs-Tag …" onkeydown="if(event.key==='Enter'){event.preventDefault();addMerkmal('global')}">
+          <button type="button" class="btn btn-primary btn-sm" onclick="addMerkmal('global')">+ Hinzufügen</button>
+        </div>
+      </div>
+      <div class="card card-p" style="position:sticky;top:24px;background:var(--muted-2)">
+        <h3>So funktioniert's</h3>
+        <ol class="muted small mt-8" style="margin:0;padding-left:18px;line-height:2">
+          <li><b>Global</b> (hier): von der Agentur, gelten für <b>alle</b> Schulen</li>
+          <li><b>Lokal</b>: jede Schule legt in ihren Einstellungen eigene an</li>
+          <li>Beim Kurs anlegen wählt die Schule aus beiden Töpfen</li>
+        </ol>
+        <div class="notice mt-16">Änderungen hier wirken sofort auf die Schnellauswahl in jeder Schule.</div>
+      </div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S11 AGENTUR · REMINDER-STANDARDS ============ -->
+<section class="screen" id="screen-agentur-reminder">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
+    <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item active" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a>
+    <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Reminder-Standards</h1><p class="muted" style="margin:4px 0 0">Globale Erinnerungs-Regeln für alle Schulen. Jede Schule kann sie übernehmen oder eigene setzen.</p></div></div>
+    <div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start;max-width:1000px">
+      <div class="card card-p">
+        <h3 style="margin-bottom:4px">Standard-Erinnerungen</h3>
+        <p class="muted tiny" style="margin:0 0 16px">Pro Regel: Zeitpunkt vor dem Termin + Kanäle. Beliebig viele Reminder möglich.</p>
+        <div id="remAgencyList"></div>
+        <button type="button" class="btn btn-primary btn-sm" onclick="addReminder('agency')">+ Reminder</button>
+      </div>
+      <div class="card card-p" style="position:sticky;top:24px;background:var(--muted-2)">
+        <h3>Vererbung</h3>
+        <ol class="muted small mt-8" style="margin:0;padding-left:18px;line-height:2">
+          <li><b>Agentur</b> (hier): Standard für alle Schulen</li>
+          <li><b>Schule</b>: übernimmt oder setzt eigene Regeln</li>
+          <li><b>Kurs</b>: kann nochmals abweichen</li>
+        </ol>
+        <hr class="hr">
+        <div class="tiny muted" style="margin-bottom:7px">Verfügbare Kanäle</div>
+        <div class="chips"><span class="badge badge-accent">✉ E-Mail</span><span class="badge badge-accent">💬 SMS</span><span class="badge badge-accent">🟢 WhatsApp</span><span class="badge badge-accent">📞 Anruf</span></div>
+        <div class="notice mt-16">Versand zentral über den Book2Dance-Mailserver/Telefonie-Anbieter. Schulen authentifizieren ihre Domain (DKIM) – optional eigener SMTP pro Schule.</div>
+      </div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S12 AGENTUR · VORLAGEN ============ -->
+<section class="screen" id="screen-agentur-vorlagen">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
+    <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Tags</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item active" data-go="agentur-vorlagen">✉ Vorlagen</a>
+    <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Vorlagen</h1><p class="muted" style="margin:4px 0 0">Nachrichten-Vorlagen für Reminder – E-Mail, SMS, WhatsApp, Anruf. Mit Platzhaltern.</p></div>
+      <button type="button" class="btn btn-primary" onclick="openTemplate(null,'agency')">+ Neue Vorlage</button></div>
+    <div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start;max-width:1000px">
+      <div class="card card-p">
+        <h3 style="margin-bottom:4px">Globale Vorlagen</h3>
+        <p class="muted tiny" style="margin:0 0 14px">Stehen allen Schulen zur Verfügung und sind in jedem Reminder auswählbar.</p>
+        <div id="tplAgencyList"></div>
+      </div>
+      <div class="card card-p" style="position:sticky;top:24px;background:var(--muted-2)">
+        <h3>Platzhalter</h3>
+        <p class="muted tiny" style="margin:4px 0 10px">Werden beim Versand automatisch ersetzt:</p>
+        <div class="chips">
+          <span class="chip">{{teilnehmer_name}}</span><span class="chip">{{kurs_titel}}</span><span class="chip">{{termin_datum}}</span>
+          <span class="chip">{{termin_uhrzeit}}</span><span class="chip">{{ort}}</span><span class="chip">{{mitbringen}}</span>
+          <span class="chip">{{schule_name}}</span><span class="chip">{{storno_link}}</span>
+        </div>
+        <div class="notice mt-16">Pro Kanal eigene Vorlagen: E-Mail mit Betreff, SMS/WhatsApp als Kurztext, Anruf als Sprechtext (TTS).</div>
+      </div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+</div><!-- /frame -->
+
+<!-- ============ MODAL: VORLAGEN-EDITOR ============ -->
+<div id="tplModal" class="modal-overlay" style="display:none">
+  <div class="modal">
+    <div class="between" style="margin-bottom:16px"><h3 id="tplModalTitle">Vorlage</h3><button type="button" class="btn btn-ghost btn-sm" onclick="closeTemplate()">✕</button></div>
+    <div class="grid" style="grid-template-columns:1.1fr .9fr;gap:20px;align-items:start">
+      <div class="col" style="gap:14px">
+        <div class="grid grid-2" style="gap:12px">
+          <div class="field" style="margin:0"><label class="label">Name der Vorlage</label><input class="input" id="tplName" placeholder="z. B. Standard-Erinnerung"></div>
+          <div class="field" style="margin:0"><label class="label">Kanal</label><select class="select" id="tplChannel" onchange="tplChannelChange();tplPreview()"><option value="email">✉ E-Mail</option><option value="sms">💬 SMS</option><option value="whatsapp">🟢 WhatsApp</option><option value="voice">📞 Anruf</option></select></div>
+        </div>
+        <div class="field" id="tplSubjectField" style="margin:0"><label class="label">Betreff</label><input class="input" id="tplSubject" oninput="tplPreview()" placeholder="Betreff der E-Mail"></div>
+        <div class="field" style="margin:0">
+          <div class="between" style="margin-bottom:6px"><label class="label" id="tplBodyLabel" style="margin:0">Inhalt (HTML)</label>
+            <button type="button" class="btn btn-ghost btn-sm" id="tplCodeToggle" onclick="tplToggleCode()" style="padding:3px 9px">&lt;/&gt; HTML</button></div>
+          <div class="rte-toolbar" id="tplToolbar">
+            <button type="button" onclick="rte('bold')" title="Fett"><b>B</b></button>
+            <button type="button" onclick="rte('italic')" title="Kursiv"><i>I</i></button>
+            <button type="button" onclick="rte('formatBlock','&lt;h2&gt;')" title="Überschrift">H</button>
+            <button type="button" onclick="rte('insertUnorderedList')" title="Aufzählung">• Liste</button>
+            <button type="button" onclick="rteLink()" title="Link einfügen">🔗 Link</button>
+            <button type="button" onclick="rteButton()" title="Button einfügen">▭ Button</button>
+          </div>
+          <div class="rte" id="tplRich" contenteditable="true" oninput="tplRichInput()"></div>
+          <textarea class="textarea" id="tplBody" style="min-height:180px;display:none" oninput="tplPreview()"></textarea>
+        </div>
+        <div><div class="tiny muted" style="margin-bottom:7px">Platzhalter einfügen (klicken):</div><div class="chips" id="tplPlaceholders"></div></div>
+        <div id="tplAttachWrap">
+          <div class="tiny muted" style="margin-bottom:7px">📎 Anhänge</div>
+          <div id="tplAttachList" class="col" style="gap:6px"></div>
+          <input type="file" id="tplAttachInput" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" multiple style="display:none" onchange="tplAddAttach(this)">
+          <button type="button" class="btn btn-secondary btn-sm mt-8" id="tplAttachBtn" onclick="document.getElementById('tplAttachInput').click()">📎 Datei anhängen</button>
+          <p class="muted tiny mt-8" id="tplAttachHint">PDF/Dokument – z. B. Anfahrt, Stundenplan, AGB. Max. ~10 MB pro Datei.</p>
+        </div>
+      </div>
+      <div class="col" style="gap:10px">
+        <div class="tiny muted" style="text-transform:uppercase;letter-spacing:.05em">Vorschau · Beispieldaten</div>
+        <div class="card card-p" style="box-shadow:none;background:var(--muted-2)">
+          <div id="tplPrevMeta" class="tiny" style="color:var(--muted-text);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)"></div>
+          <div id="tplPrevSubject" class="small" style="font-weight:650;margin-bottom:8px"></div>
+          <div id="tplPrevBody" class="small" style="white-space:pre-wrap;line-height:1.65"></div>
+        </div>
+        <p class="muted tiny">Absender wird je Schule unter <b>Einstellungen → Absender</b> gesetzt. Test-Versand folgt im echten Produkt.</p>
+      </div>
+    </div>
+    <div class="row mt-24" style="justify-content:flex-end;gap:8px"><button type="button" class="btn btn-ghost" onclick="closeTemplate()">Abbrechen</button><button type="button" class="btn btn-primary" id="tplSaveBtn" onclick="saveTemplate()">Speichern</button></div>
+  </div>
+</div>
+
+<script>
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  var el=document.getElementById('screen-'+id);
+  if(el){el.classList.add('active');}
+  var p=document.getElementById('picker'); if(p) p.value=id;
+  window.scrollTo({top:0,behavior:'instant'});
+}
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-go]');
+  if(t){e.preventDefault(); go(t.getAttribute('data-go'));}
+});
+function pick(el){document.querySelectorAll('#terms .term').forEach(t=>t.classList.remove('selected'));el.classList.add('selected');}
+
+/* ===== Merkmale / Chips verwalten ===== */
+function buildChip(text,opts){
+  opts=opts||{};
+  var span=document.createElement('span');
+  span.className='chip'+(opts.accent?' chip-accent':'')+(opts.mini?' chip-mini':'');
+  span.appendChild(document.createTextNode(text));
+  var x=document.createElement('button');
+  x.type='button';x.className='chip-x';x.textContent='×';
+  x.onclick=function(){var p=span.parentNode;span.remove();if(p&&p.id==='courseChips')syncKursPreview();};
+  span.appendChild(x);
+  return span;
+}
+function delCourseChip(btn){btn.closest('.chip').remove();syncKursPreview();}
+function delChipEl(btn){btn.closest('.chip').remove();}
+function addCourseChip(){
+  var inp=document.getElementById('courseChipInput');
+  var v=(inp.value||'').trim(); if(!v)return;
+  document.getElementById('courseChips').appendChild(buildChip(v));
+  inp.value=''; syncKursPreview();
+}
+function addCourseChipByName(name){
+  document.getElementById('courseChips').appendChild(buildChip(name));
+  syncKursPreview();
+}
+function addTermChip(btn){
+  var t=(prompt('Tag für diesen Termin:')||'').trim(); if(!t)return;
+  btn.parentNode.insertBefore(buildChip(t,{mini:true}),btn);
+}
+function syncKursPreview(){
+  var src=document.getElementById('courseChips'), dst=document.getElementById('kursPreviewChips');
+  if(!src||!dst)return;
+  dst.innerHTML='';
+  src.querySelectorAll('.chip').forEach(function(c){
+    var b=document.createElement('span');
+    b.className='badge'+(c.classList.contains('chip-accent')?' badge-accent':'');
+    b.textContent=c.firstChild.nodeValue;
+    dst.appendChild(b);
+  });
+}
+
+/* ===== Merkmale-Bibliothek: global (Agentur) + lokal (Schule) ===== */
+var MERKMALE={
+  global:['Anfänger','Fortgeschritten','Kein Partner nötig','Mit Partner','Barrierefrei','Ü30'],
+  local:['Barfuß möglich','Beliebt']
+};
+function libChip(name,opts){
+  opts=opts||{};
+  var span=document.createElement('span');
+  span.className='chip'+(opts.ghost?' chip-ghost':'');
+  span.appendChild(document.createTextNode(name));
+  if(opts.tag){var t=document.createElement('span');t.className='tiny';t.style.cssText='margin-left:3px;opacity:.6;font-weight:500';t.textContent='· '+opts.tag;span.appendChild(t);}
+  if(opts.onRemove){var x=document.createElement('button');x.type='button';x.className='chip-x';x.textContent='×';x.onclick=opts.onRemove;span.appendChild(x);}
+  if(opts.onClick){span.style.cursor='pointer';span.onclick=opts.onClick;}
+  return span;
+}
+function renderAllMerkmale(){renderAgencyMerkmale();renderSchoolMerkmale();renderCourseQuick();}
+function renderAgencyMerkmale(){
+  var c=document.getElementById('globalMerkmaleList'); if(!c)return; c.innerHTML='';
+  MERKMALE.global.forEach(function(n){c.appendChild(libChip(n,{onRemove:function(){removeMerkmal('global',n);}}));});
+}
+function renderSchoolMerkmale(){
+  var gi=document.getElementById('inheritedMerkmaleList');
+  if(gi){gi.innerHTML='';MERKMALE.global.forEach(function(n){gi.appendChild(libChip(n,{tag:'Agentur'}));});}
+  var lo=document.getElementById('localMerkmaleList');
+  if(lo){lo.innerHTML='';MERKMALE.local.forEach(function(n){lo.appendChild(libChip(n,{onRemove:function(){removeMerkmal('local',n);}}));});}
+}
+function renderCourseQuick(){
+  var g=document.getElementById('courseQuickGlobal');
+  if(g){g.innerHTML='';MERKMALE.global.forEach(function(n){g.appendChild(libChip(n,{ghost:true,onClick:function(){addCourseChipByName(n);}}));});}
+  var l=document.getElementById('courseQuickLocal');
+  if(l){l.innerHTML='';MERKMALE.local.forEach(function(n){l.appendChild(libChip(n,{ghost:true,onClick:function(){addCourseChipByName(n);}}));});}
+}
+function addMerkmal(scope){
+  var inp=document.getElementById(scope==='global'?'globalMerkmalInput':'localMerkmalInput');
+  var v=(inp.value||'').trim(); if(!v)return;
+  if(MERKMALE[scope].indexOf(v)<0)MERKMALE[scope].push(v);
+  inp.value=''; renderAllMerkmale();
+}
+function removeMerkmal(scope,name){
+  MERKMALE[scope]=MERKMALE[scope].filter(function(x){return x!==name;});
+  renderAllMerkmale();
+}
+
+/* ===== Serie / Wiederholung ===== */
+function setModel(el,m){
+  document.querySelectorAll('#model .term').forEach(function(t){t.classList.remove('selected');var b=t.querySelector('.badge');b.textContent='wählen';b.className='badge';});
+  el.classList.add('selected');var b=el.querySelector('.badge');b.textContent='gewählt';b.className='badge badge-green';
+  var sb=document.getElementById('seriesBuilder'); if(sb)sb.style.display=(m==='series')?'':'none';
+}
+var SER_END='count';
+function serEndMode(el,m){SER_END=m;document.querySelectorAll('#serEnd .term').forEach(function(t){t.classList.remove('selected');});el.classList.add('selected');}
+function fmtDE(d){var wd=['So','Mo','Di','Mi','Do','Fr','Sa'][d.getDay()];
+  return wd+' · '+String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear();}
+function buildTermRow(dateStr,time,seats){
+  var tr=document.createElement('tr');
+  tr.innerHTML='<td><input class="input" value="'+dateStr+'" style="padding:7px 10px"></td>'
+    +'<td><input class="input" value="'+time+'" style="padding:7px 10px;max-width:84px"></td>'
+    +'<td><input class="input" value="'+seats+'" style="padding:7px 10px;max-width:64px"></td>'
+    +'<td><div class="chips" style="max-width:220px"><button type="button" class="chip chip-mini chip-ghost" onclick="addTermChip(this)">+ Tag</button></div></td>'
+    +'<td><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest(\'tr\').remove();updateTermCount()">✕</button></td>';
+  return tr;
+}
+function updateTermCount(){var el=document.getElementById('termCount');if(el)el.textContent='('+document.querySelectorAll('#termRows tr').length+')';}
+function addEmptyTerm(){var r=document.getElementById('termRows');if(r){r.appendChild(buildTermRow('','19:00','12'));updateTermCount();}}
+function serUnitChange(){
+  var u=document.getElementById('serUnit').value;
+  document.getElementById('serWeekdays').style.display=(u==='week')?'':'none';
+  document.getElementById('serMonthOpt').style.display=(u==='month')?'':'none';
+  document.getElementById('serUnitLabel').textContent={day:'Tag(e)',week:'Woche(n)',month:'Monat(e)'}[u];
+}
+function toggleWd(el){el.classList.toggle('chip-accent');el.classList.toggle('chip-ghost');}
+function nthWeekday(y,mo,wd,n){
+  var first=new Date(y,mo,1);
+  var day=1+((wd-first.getDay()+7)%7)+(n-1)*7;
+  var last=new Date(y,mo+1,0).getDate();
+  while(day>last)day-=7;
+  return new Date(y,mo,day);
+}
+function generateSeries(){
+  var rows=document.getElementById('termRows'); if(!rows)return;
+  var start=document.getElementById('serStart').value; if(!start)return;
+  var time=document.getElementById('serTime').value||'19:00';
+  var seats=document.getElementById('serSeats').value||'12';
+  var unit=document.getElementById('serUnit').value;
+  var step=Math.max(1,parseInt(document.getElementById('serInterval').value,10)||1);
+  var count=parseInt(document.getElementById('serCount').value,10)||8;
+  var until=document.getElementById('serUntil').value;
+  var startD=new Date(start+'T00:00:00');
+  var untilD=until?new Date(until+'T23:59:59'):null;
+  var byDate=(SER_END==='date'&&untilD);
+  var dates=[],cap=600;
+  if(unit==='day'){
+    var d=new Date(startD);
+    while(cap-->0){ if(byDate?d>untilD:dates.length>=count)break; dates.push(new Date(d)); d.setDate(d.getDate()+step); }
+  }else if(unit==='week'){
+    var wds=[].slice.call(document.querySelectorAll('#serWeekdays .wd.chip-accent')).map(function(c){return +c.getAttribute('data-d');});
+    if(!wds.length)wds=[startD.getDay()];
+    var monday=new Date(startD); monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
+    var w=0;
+    while(cap-->0){
+      var base=new Date(monday); base.setDate(base.getDate()+w*7*step);
+      var added=false;
+      wds.map(function(wd){return (wd+6)%7;}).sort(function(a,b){return a-b;}).forEach(function(off){
+        var dd=new Date(base); dd.setDate(dd.getDate()+off);
+        if(dd<startD)return;
+        if(byDate){if(dd<=untilD)dates.push(dd);}else if(dates.length<count)dates.push(dd);
+        added=true;
+      });
+      w++;
+      if(byDate){ if(base>untilD)break; } else if(dates.length>=count)break;
+      if(w>320)break;
+    }
+    dates.sort(function(a,b){return a-b;});
+  }else{ // month
+    var mode=document.getElementById('serMonthMode').value;
+    var dom=startD.getDate(), wd=startD.getDay(), nth=Math.ceil(dom/7);
+    var m=new Date(startD.getFullYear(),startD.getMonth(),1);
+    while(cap-->0){
+      var occ=(mode==='weekday')?nthWeekday(m.getFullYear(),m.getMonth(),wd,nth):new Date(m.getFullYear(),m.getMonth(),dom);
+      if(occ>=startD){ if(byDate){if(occ>untilD)break; dates.push(occ);} else { if(dates.length>=count)break; dates.push(occ);} }
+      m.setMonth(m.getMonth()+step);
+    }
+  }
+  if(!byDate)dates=dates.slice(0,count);
+  rows.innerHTML='';
+  dates.forEach(function(d){rows.appendChild(buildTermRow(fmtDE(d),time,seats));});
+  updateTermCount();
+}
+
+/* ===== Reminder: Agentur → Schule → Kurs ===== */
+var CHAN=[['email','✉ E-Mail'],['sms','💬 SMS'],['whatsapp','🟢 WhatsApp'],['voice','📞 Anruf']];
+var REM={
+  agency:[{val:'1',unit:'Tag',ch:{email:1,sms:1,whatsapp:0,voice:0},tpl:{email:'t1',sms:'t2'}},
+          {val:'2',unit:'Std',ch:{email:0,sms:1,whatsapp:1,voice:0},tpl:{sms:'t2',whatsapp:'t3'}}],
+  schoolUseAgency:true,
+  school:[{val:'1',unit:'Tag',ch:{email:1,sms:1,whatsapp:0,voice:0},tpl:{email:'t5',sms:'t2'}}],
+  courseUseSchool:true,
+  course:[{val:'3',unit:'Std',ch:{email:1,sms:0,whatsapp:0,voice:1},tpl:{email:'t1',voice:'t4'}}]
+};
+function tplName(id){var t=TEMPLATES.filter(function(x){return x.id===id;})[0];return t?t.name:null;}
+function chanBadges(ch,tpl){
+  var out=CHAN.filter(function(c){return ch[c[0]];}).map(function(c){
+    var nm=tpl&&tpl[c[0]]?tplName(tpl[c[0]]):null;
+    return '<span class="badge badge-accent">'+c[1]+'</span>'+(nm?' <span class="tiny muted">'+nm+'</span>':' <span class="tiny" style="color:var(--amber)">⚠ keine Vorlage</span>');
+  });
+  return out.length?out.join(' &nbsp; '):'<span class="muted tiny">kein Kanal aktiv</span>';
+}
+function renderReminderList(container,rules,editable,onChange){
+  container.innerHTML='';
+  rules.forEach(function(r,idx){
+    var row=document.createElement('div');
+    row.style.cssText='border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px;background:var(--muted-2)';
+    if(editable){
+      var line=document.createElement('div');line.className='row';line.style.gap='8px';
+      var num=document.createElement('input');num.className='input';num.value=r.val;num.style.cssText='max-width:64px;padding:7px 10px';num.oninput=function(){r.val=num.value;};
+      var unit=document.createElement('select');unit.className='select';unit.style.cssText='max-width:92px;padding:7px 10px';
+      ['Min','Std','Tag'].forEach(function(u){var o=document.createElement('option');o.textContent=u;if(u===r.unit)o.selected=true;unit.appendChild(o);});
+      unit.onchange=function(){r.unit=unit.value;};
+      var lbl=document.createElement('span');lbl.className='small muted';lbl.textContent='vorher';
+      var sp=document.createElement('div');sp.className='spacer';
+      var del=document.createElement('button');del.type='button';del.className='btn btn-ghost btn-sm';del.textContent='✕';
+      del.onclick=function(){rules.splice(idx,1);onChange();};
+      line.appendChild(num);line.appendChild(unit);line.appendChild(lbl);line.appendChild(sp);line.appendChild(del);
+      var chips=document.createElement('div');chips.className='chips';chips.style.marginTop='10px';
+      CHAN.forEach(function(c){
+        var chip=document.createElement('span');
+        chip.className='chip'+(r.ch[c[0]]?' chip-accent':' chip-ghost');chip.style.cursor='pointer';chip.textContent=c[1];
+        chip.onclick=function(){r.ch[c[0]]=r.ch[c[0]]?0:1;onChange();};
+        chips.appendChild(chip);
+      });
+      row.appendChild(line);row.appendChild(chips);
+      // Template-Auswahl pro aktivem Kanal
+      var tplWrap=document.createElement('div');tplWrap.style.marginTop='10px';
+      CHAN.forEach(function(c){
+        var key=c[0]; if(!r.ch[key])return;
+        var opts=TEMPLATES.filter(function(t){return t.channel===key;});
+        r.tpl=r.tpl||{};
+        if(opts.length && !r.tpl[key])r.tpl[key]=opts[0].id;
+        var tl=document.createElement('div');tl.className='row';tl.style.cssText='gap:8px;align-items:center;margin-top:6px';
+        var lab=document.createElement('span');lab.className='tiny muted';lab.style.minWidth='96px';lab.textContent=c[1]+' · Vorlage';
+        var sel=document.createElement('select');sel.className='select';sel.style.cssText='padding:6px 10px;max-width:260px';
+        if(!opts.length){var o=document.createElement('option');o.textContent='— keine '+c[1]+'-Vorlage —';sel.appendChild(o);sel.disabled=true;}
+        opts.forEach(function(t){var o=document.createElement('option');o.value=t.id;o.textContent=t.name+(t.scope==='agency'?' (global)':'');if(r.tpl[key]===t.id)o.selected=true;sel.appendChild(o);});
+        sel.onchange=function(){r.tpl[key]=sel.value;};
+        tl.appendChild(lab);tl.appendChild(sel);tplWrap.appendChild(tl);
+      });
+      row.appendChild(tplWrap);
+    }else{
+      row.innerHTML='<div class="between" style="align-items:flex-start"><b class="small" style="white-space:nowrap;margin-right:12px">'+r.val+' '+r.unit+' vorher</b><span style="text-align:right">'+chanBadges(r.ch,r.tpl)+'</span></div>';
+    }
+    container.appendChild(row);
+  });
+  if(!rules.length){var e=document.createElement('div');e.className='muted tiny';e.textContent='Keine Reminder konfiguriert.';container.appendChild(e);}
+}
+function renderReminders(){
+  var a=document.getElementById('remAgencyList'); if(a)renderReminderList(a,REM.agency,true,renderReminders);
+  var effSchool=REM.schoolUseAgency?REM.agency:REM.school;
+  var sT=document.getElementById('remSchoolUseAgency'); if(sT)sT.checked=REM.schoolUseAgency;
+  var sL=document.getElementById('remSchoolList');
+  if(sL)renderReminderList(sL,REM.schoolUseAgency?REM.agency:REM.school,!REM.schoolUseAgency,renderReminders);
+  var sA=document.getElementById('remSchoolAdd'); if(sA)sA.style.display=REM.schoolUseAgency?'none':'';
+  var sH=document.getElementById('remSchoolHint'); if(sH)sH.textContent=REM.schoolUseAgency?'Es gelten die Agentur-Standards (schreibgeschützt).':'Eigene Reminder-Regeln dieser Schule.';
+  var cT=document.getElementById('remCourseUseSchool'); if(cT)cT.checked=REM.courseUseSchool;
+  var cL=document.getElementById('remCourseList');
+  if(cL)renderReminderList(cL,REM.courseUseSchool?effSchool:REM.course,!REM.courseUseSchool,renderReminders);
+  var cA=document.getElementById('remCourseAdd'); if(cA)cA.style.display=REM.courseUseSchool?'none':'';
+  var cH=document.getElementById('remCourseHint'); if(cH)cH.textContent=REM.courseUseSchool?'Es gelten die Reminder dieser Schule (schreibgeschützt).':'Eigene Reminder nur für diesen Kurs.';
+}
+function addReminder(scope){REM[scope].push({val:'1',unit:'Std',ch:{email:1,sms:0,whatsapp:0,voice:0}});renderReminders();}
+function toggleRemSchool(cb){REM.schoolUseAgency=cb.checked;renderReminders();}
+function toggleRemCourse(cb){REM.courseUseSchool=cb.checked;renderReminders();}
+
+/* ===== Team / Rollen: mehrere Admins einladen ===== */
+var ROLES=['Superadmin','Admin','Reader'];
+function roleSelect(role){
+  var s=document.createElement('select');s.className='select';s.style.minWidth='128px';
+  ROLES.forEach(function(r){var o=document.createElement('option');o.textContent=r;if(r===role)o.selected=true;s.appendChild(o);});
+  return s;
+}
+function addInviteRow(listId,name,email,role){
+  var list=document.getElementById(listId); if(!list)return;
+  var row=document.createElement('div');row.className='row';row.style.cssText='gap:8px;align-items:flex-end;margin-bottom:10px';
+  var f1=document.createElement('div');f1.style.flex='1';f1.innerHTML='<label class="label">Name</label>';
+  var n=document.createElement('input');n.className='input';n.placeholder='Name';n.value=name||'';f1.appendChild(n);
+  var f2=document.createElement('div');f2.style.flex='1';f2.innerHTML='<label class="label">E-Mail</label>';
+  var e=document.createElement('input');e.className='input';e.type='email';e.placeholder='name@schule.de';e.value=email||'';f2.appendChild(e);
+  var f3=document.createElement('div');f3.innerHTML='<label class="label">Rolle</label>';f3.appendChild(roleSelect(role||'Admin'));
+  var del=document.createElement('button');del.type='button';del.className='btn btn-ghost btn-sm';del.textContent='✕';del.style.marginBottom='2px';del.onclick=function(){row.remove();};
+  row.appendChild(f1);row.appendChild(f2);row.appendChild(f3);row.appendChild(del);
+  list.appendChild(row);
+}
+
+/* ===== Nachrichten-Vorlagen (Templates) ===== */
+var PLACEHOLDERS=[
+  ['{{teilnehmer_name}}','Name des Teilnehmers'],
+  ['{{kurs_titel}}','Kurstitel'],
+  ['{{termin_datum}}','Datum des Termins'],
+  ['{{termin_uhrzeit}}','Uhrzeit'],
+  ['{{ort}}','Ort / Raum'],
+  ['{{mitbringen}}','Was mitbringen'],
+  ['{{schule_name}}','Name der Tanzschule'],
+  ['{{storno_link}}','Stornieren / Umbuchen']
+];
+var TPL_SAMPLE={teilnehmer_name:'Maria Musterfrau',kurs_titel:'Discofox Schnupperstunde',termin_datum:'Di · 16.06.2026',termin_uhrzeit:'19:00',ort:'Saal 1, Bahnhofstr. 12, Rosenheim',mitbringen:'Bequeme Kleidung, saubere Schuhe',schule_name:'Tanzschule Schrittwerk',storno_link:'book2dance.de/s/ab12cd'};
+function fillPlaceholders(t){return (t||'').replace(/\{\{(\w+)\}\}/g,function(m,k){return TPL_SAMPLE[k]!=null?TPL_SAMPLE[k]:m;});}
+function tplChanLabel(ch){return ({email:'✉ E-Mail',sms:'💬 SMS',whatsapp:'🟢 WhatsApp',voice:'📞 Anruf'})[ch]||ch;}
+var TEMPLATES=[
+  {id:'t1',scope:'agency',channel:'email',format:'html',name:'Standard-Erinnerung',subject:'Erinnerung: {{kurs_titel}} am {{termin_datum}}',attachments:[{name:'Anfahrt-Schrittwerk.pdf',size:184320}],body:'<h2>Bis bald, {{teilnehmer_name}}! 💃</h2>\n<p style="color:#3f3f46;line-height:1.6">schön, dass du dabei bist! Deine Schnupperstunde <b>{{kurs_titel}}</b> findet statt am:</p>\n<p style="font-size:16px"><b>{{termin_datum}} · {{termin_uhrzeit}}</b><br>{{ort}}</p>\n<p style="color:#3f3f46">Bitte mitbringen: {{mitbringen}}</p>\n<p style="margin:20px 0"><a href="{{storno_link}}" style="background:#dc2626;color:#fff;padding:11px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block">Termin absagen</a></p>\n<p style="color:#71717a;font-size:13px">Liebe Grüße,<br>{{schule_name}}</p>'},
+  {id:'t2',scope:'agency',channel:'sms',format:'text',name:'Kurz-SMS',subject:'',body:'{{schule_name}}: Erinnerung an {{kurs_titel}} am {{termin_datum}}, {{termin_uhrzeit}} ({{ort}}). Absagen: {{storno_link}}'},
+  {id:'t3',scope:'agency',channel:'whatsapp',format:'text',name:'WhatsApp-Erinnerung',subject:'',body:'Hallo {{teilnehmer_name}} 👋 kurze Erinnerung an „{{kurs_titel}}" am {{termin_datum}} um {{termin_uhrzeit}}. Bis gleich! {{schule_name}}'},
+  {id:'t4',scope:'agency',channel:'voice',format:'text',name:'Anruf-Ansage',subject:'',body:'Hallo {{teilnehmer_name}}. Dies ist eine automatische Erinnerung von {{schule_name}} an Ihre Schnupperstunde {{kurs_titel}} am {{termin_datum}} um {{termin_uhrzeit}}. Wir freuen uns auf Sie.'},
+  {id:'t5',scope:'school',channel:'email',format:'html',name:'Schrittwerk – herzlich',subject:'Wir sehen uns beim {{kurs_titel}}! 💃',body:'<h2>Hi {{teilnehmer_name}} 👋</h2>\n<p style="color:#3f3f46;line-height:1.6">wir freuen uns riesig auf dich am <b>{{termin_datum}} um {{termin_uhrzeit}}</b> in {{ort}}.</p>\n<p style="color:#71717a;font-size:13px">Liebe Grüße<br>Dein Team von {{schule_name}}</p>'}
+];
+var SENDER={fromName:'Tanzschule Schrittwerk',fromEmail:'kurse@schrittwerk.book2dance.de',replyTo:'info@schrittwerk.de',emailVerified:true,smsSender:'Schrittwerk',waConnected:true};
+function setSender(field,val){SENDER[field]=val;if(document.getElementById('tplModal').style.display==='flex')tplPreview();}
+function setSendMode(el,mode){
+  document.querySelectorAll('#sendMode .term').forEach(function(t){t.classList.remove('selected');var b=t.querySelector('.badge');b.textContent='wählen';b.className='badge';});
+  el.classList.add('selected');var b=el.querySelector('.badge');b.textContent='aktiv';b.className='badge badge-green';
+  document.getElementById('sendManaged').style.display=(mode==='managed')?'':'none';
+  document.getElementById('sendOwn').style.display=(mode==='own')?'':'none';
+}
+function senderMeta(ch){
+  if(ch==='email')return 'Von: <b>'+SENDER.fromName+'</b> &lt;'+SENDER.fromEmail+'&gt;<br>Antwort an: '+SENDER.replyTo;
+  if(ch==='sms')return 'Absender (SMS): <b>'+SENDER.smsSender+'</b>';
+  if(ch==='whatsapp')return 'WhatsApp Business: <b>'+SENDER.fromName+'</b>';
+  if(ch==='voice')return 'Anruf von: <b>'+SENDER.fromName+'</b>';
+  return '';
+}
+var TPL_SEQ=100, tplEditingId=null, tplEditingScope='agency';
+var tplCodeMode=false, tplReadonly=false;
+function isEmailTpl(){return document.getElementById('tplChannel').value==='email';}
+function openTemplate(id,scope,readonly){
+  tplEditingScope=scope||'agency';
+  var t=id?TEMPLATES.filter(function(x){return x.id===id;})[0]:null;
+  tplEditingId=t?t.id:null;
+  tplReadonly=!!readonly; tplCodeMode=false;
+  document.getElementById('tplName').value=t?t.name:'';
+  document.getElementById('tplChannel').value=t?t.channel:'email';
+  document.getElementById('tplSubject').value=t?(t.subject||''):'';
+  document.getElementById('tplBody').value=t?t.body:'';
+  ['tplName','tplChannel','tplSubject','tplBody'].forEach(function(i){document.getElementById(i).disabled=tplReadonly;});
+  document.getElementById('tplPlaceholders').style.display=tplReadonly?'none':'';
+  document.getElementById('tplSaveBtn').style.display=tplReadonly?'none':'';
+  document.getElementById('tplModalTitle').textContent=tplReadonly?'Vorlage ansehen':(t?'Vorlage bearbeiten':'Neue Vorlage');
+  tplAttachments=(t&&t.attachments)?t.attachments.map(function(a){return {name:a.name,size:a.size};}):[];
+  renderPlaceholders(); renderAttachList(); tplChannelChange(); tplPreview();
+  document.getElementById('tplModal').style.display='flex';
+}
+function closeTemplate(){document.getElementById('tplModal').style.display='none';}
+function tplChannelChange(){
+  var ch=document.getElementById('tplChannel').value;
+  document.getElementById('tplSubjectField').style.display=(ch==='email')?'':'none';
+  document.getElementById('tplBodyLabel').textContent=(ch==='voice')?'Sprechtext (wird vorgelesen)':(ch==='email'?(tplCodeMode?'Inhalt (HTML-Code)':'Inhalt (HTML)'):'Nachricht');
+  tplRenderEditorMode(); updateAttachVisibility();
+}
+function tplRenderEditorMode(){
+  var email=isEmailTpl();
+  var rich=document.getElementById('tplRich'), ta=document.getElementById('tplBody');
+  var tb=document.getElementById('tplToolbar'), tog=document.getElementById('tplCodeToggle');
+  tb.style.display=(email&&!tplReadonly)?'':'none';
+  tog.style.display=(email&&!tplReadonly)?'':'none';
+  rich.contentEditable=tplReadonly?'false':'true';
+  if(email&&!tplCodeMode){
+    rich.innerHTML=ta.value; rich.style.display=''; ta.style.display='none';
+    rich.style.borderRadius=tb.style.display==='none'?'var(--radius)':'0 0 var(--radius) var(--radius)';
+  }else{
+    rich.style.display='none'; ta.style.display='';
+  }
+  tog.textContent=tplCodeMode?'✎ Visuell':'</> HTML';
+  document.getElementById('tplBodyLabel').textContent=(document.getElementById('tplChannel').value==='voice')?'Sprechtext (wird vorgelesen)':(email?(tplCodeMode?'Inhalt (HTML-Code)':'Inhalt (HTML)'):'Nachricht');
+}
+function tplToggleCode(){ if(!isEmailTpl())return; if(!tplCodeMode){document.getElementById('tplBody').value=document.getElementById('tplRich').innerHTML;} tplCodeMode=!tplCodeMode; tplRenderEditorMode(); tplPreview(); }
+function tplRichInput(){document.getElementById('tplBody').value=document.getElementById('tplRich').innerHTML;tplPreview();}
+function rte(cmd,val){document.getElementById('tplRich').focus();document.execCommand(cmd,false,val||null);tplRichInput();}
+function rteLink(){var u=prompt('Link-URL:','https://');if(u){rte('createLink',u);}}
+function rteButton(){var u=prompt('Button-Ziel (URL oder Platzhalter):','{{storno_link}}');if(u==null)return;var label=prompt('Button-Text:','Jetzt ansehen')||'Button';document.getElementById('tplRich').focus();document.execCommand('insertHTML',false,'<a href="'+u+'" style="background:#dc2626;color:#fff;padding:11px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block">'+label+'</a>&nbsp;');tplRichInput();}
+function renderPlaceholders(){
+  var c=document.getElementById('tplPlaceholders'); if(!c)return; c.innerHTML='';
+  PLACEHOLDERS.forEach(function(p){
+    var b=document.createElement('span');b.className='chip chip-ghost';b.style.cursor='pointer';b.textContent=p[0];b.title=p[1];
+    b.onclick=function(){insertPlaceholder(p[0]);};
+    c.appendChild(b);
+  });
+}
+function insertPlaceholder(ph){
+  if(isEmailTpl()&&!tplCodeMode){
+    var rich=document.getElementById('tplRich'); rich.focus();
+    document.execCommand('insertText',false,ph); tplRichInput(); return;
+  }
+  var ta=document.getElementById('tplBody'); ta.focus();
+  var s=ta.selectionStart, e=ta.selectionEnd;
+  if(s==null){s=e=ta.value.length;}
+  ta.value=ta.value.slice(0,s)+ph+ta.value.slice(e);
+  ta.selectionStart=ta.selectionEnd=s+ph.length;
+  tplPreview();
+}
+function tplBodyValue(){ if(isEmailTpl()&&!tplCodeMode)return document.getElementById('tplRich').innerHTML; return document.getElementById('tplBody').value; }
+var tplAttachments=[];
+function attachAllowed(ch){return ch==='email'||ch==='whatsapp';}
+function fmtSize(b){if(b==null)return '';if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(0)+' KB';return (b/1048576).toFixed(1)+' MB';}
+function fileIcon(name){return /\.pdf$/i.test(name)?'📄':(/\.(png|jpe?g|gif)$/i.test(name)?'🖼️':'📎');}
+function renderAttachList(){
+  var c=document.getElementById('tplAttachList'); if(!c)return; c.innerHTML='';
+  if(!tplAttachments.length){var e=document.createElement('div');e.className='muted tiny';e.textContent='Keine Anhänge.';c.appendChild(e);return;}
+  tplAttachments.forEach(function(a,idx){
+    var row=document.createElement('div');row.className='between';row.style.cssText='border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;background:var(--bg)';
+    var left=document.createElement('div');left.className='small';left.innerHTML=fileIcon(a.name)+' '+a.name+' <span class="muted tiny">'+fmtSize(a.size)+'</span>';
+    row.appendChild(left);
+    if(!tplReadonly){var x=document.createElement('button');x.type='button';x.className='btn btn-ghost btn-sm';x.textContent='✕';x.onclick=function(){tplAttachments.splice(idx,1);renderAttachList();};row.appendChild(x);}
+    c.appendChild(row);
+  });
+}
+function tplAddAttach(input){
+  var files=input.files||[];
+  for(var i=0;i<files.length;i++){tplAttachments.push({name:files[i].name,size:files[i].size});}
+  input.value=''; renderAttachList();
+}
+function updateAttachVisibility(){
+  var wrap=document.getElementById('tplAttachWrap'); if(!wrap)return;
+  var ch=document.getElementById('tplChannel').value;
+  wrap.style.display=attachAllowed(ch)?'':'none';
+  var btn=document.getElementById('tplAttachBtn'); if(btn)btn.style.display=tplReadonly?'none':'';
+  var hint=document.getElementById('tplAttachHint'); if(hint)hint.style.display=tplReadonly?'none':'';
+}
+function tplPreview(){
+  var ch=document.getElementById('tplChannel').value;
+  var subj=document.getElementById('tplSubject').value;
+  var meta=document.getElementById('tplPrevMeta'); if(meta)meta.innerHTML=senderMeta(ch);
+  document.getElementById('tplPrevSubject').textContent=(ch==='email'&&subj)?fillPlaceholders(subj):'';
+  var box=document.getElementById('tplPrevBody');
+  var attHtml='';
+  if(attAllowedPreview(ch)&&tplAttachments.length){
+    attHtml='<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">'+tplAttachments.map(function(a){return '<div class="tiny" style="color:var(--muted-text)">'+fileIcon(a.name)+' '+a.name+' · '+fmtSize(a.size)+'</div>';}).join('')+'</div>';
+  }
+  if(ch==='email'){ box.className='email-preview small'; box.innerHTML=fillPlaceholders(tplBodyValue())+attHtml; }
+  else { box.className='small'; box.style.whiteSpace='normal'; box.innerHTML='<span style="white-space:pre-wrap">'+fillPlaceholders(tplBodyValue()).replace(/</g,'&lt;')+'</span>'+attHtml; }
+}
+function attAllowedPreview(ch){return ch==='email'||ch==='whatsapp';}
+function saveTemplate(){
+  var ch=document.getElementById('tplChannel').value;
+  var body=tplBodyValue();
+  var atts=attachAllowed(ch)?tplAttachments.slice():[];
+  var data={name:document.getElementById('tplName').value.trim()||'Unbenannt',channel:ch,subject:document.getElementById('tplSubject').value,body:body,format:ch==='email'?'html':'text',attachments:atts};
+  if(tplEditingId){var t=TEMPLATES.filter(function(x){return x.id===tplEditingId;})[0];if(t){t.name=data.name;t.channel=data.channel;t.subject=data.subject;t.body=data.body;t.format=data.format;t.attachments=atts;}}
+  else{data.id='t'+(++TPL_SEQ);data.scope=tplEditingScope;TEMPLATES.push(data);}
+  closeTemplate(); renderTemplates(); renderReminders();
+}
+function deleteTemplate(id){TEMPLATES=TEMPLATES.filter(function(x){return x.id!==id;});renderTemplates();renderReminders();}
+function copyTemplateToSchool(id){
+  var t=TEMPLATES.filter(function(x){return x.id===id;})[0]; if(!t)return;
+  TEMPLATES.push({id:'t'+(++TPL_SEQ),scope:'school',channel:t.channel,format:t.format,name:t.name+' (Kopie)',subject:t.subject,body:t.body});
+  renderTemplates(); renderReminders();
+}
+function templateCard(t,editable){
+  var div=document.createElement('div');
+  div.style.cssText='border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px;background:var(--muted-2)';
+  var top=document.createElement('div');top.className='between';
+  var left=document.createElement('div');
+  var attN=(t.attachments||[]).length;
+  left.innerHTML='<b class="small">'+t.name+'</b> <span class="badge">'+tplChanLabel(t.channel)+'</span>'+(t.scope==='agency'?' <span class="badge badge-accent">global</span>':'')+(attN?' <span class="badge">📎 '+attN+'</span>':'');
+  top.appendChild(left);
+  var act=document.createElement('div');act.className='row';act.style.gap='4px';
+  if(editable){
+    var ed=document.createElement('button');ed.type='button';ed.className='btn btn-ghost btn-sm';ed.textContent='Bearbeiten';ed.onclick=function(){openTemplate(t.id,t.scope,false);};
+    var de=document.createElement('button');de.type='button';de.className='btn btn-ghost btn-sm';de.textContent='✕';de.onclick=function(){deleteTemplate(t.id);};
+    act.appendChild(ed);act.appendChild(de);
+  }else{
+    var vw=document.createElement('button');vw.type='button';vw.className='btn btn-ghost btn-sm';vw.textContent='Ansehen';vw.onclick=function(){openTemplate(t.id,t.scope,true);};
+    var cp=document.createElement('button');cp.type='button';cp.className='btn btn-ghost btn-sm';cp.textContent='Kopieren';cp.onclick=function(){copyTemplateToSchool(t.id);};
+    act.appendChild(vw);act.appendChild(cp);
+  }
+  top.appendChild(act);div.appendChild(top);
+  var prev=document.createElement('div');prev.className='muted tiny';prev.style.cssText='margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
+  var plain=(t.body||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+  prev.textContent=(t.subject?t.subject+' — ':'')+plain.slice(0,90);
+  div.appendChild(prev);
+  return div;
+}
+function renderTemplates(){
+  var a=document.getElementById('tplAgencyList');
+  if(a){a.innerHTML='';TEMPLATES.filter(function(t){return t.scope==='agency';}).forEach(function(t){a.appendChild(templateCard(t,true));});}
+  var sg=document.getElementById('tplSchoolGlobalList');
+  if(sg){sg.innerHTML='';TEMPLATES.filter(function(t){return t.scope==='agency';}).forEach(function(t){sg.appendChild(templateCard(t,false));});}
+  var sl=document.getElementById('tplSchoolLocalList');
+  if(sl){sl.innerHTML='';TEMPLATES.filter(function(t){return t.scope==='school';}).forEach(function(t){sl.appendChild(templateCard(t,true));});}
+}
+
+/* ===== Look / Theme einstellen ===== */
+function hexToRgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');
+  return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function mix(rgb,t,a){return rgb.map((c,i)=>Math.round(c+(t[i]-c)*a));}
+function toHex(a){return '#'+a.map(c=>Math.max(0,Math.min(255,c)).toString(16).padStart(2,'0')).join('');}
+function applyTheme(hex){
+  var base=hexToRgb(hex);
+  var strong=mix(base,[0,0,0],.18);
+  var accent2=mix(base,[219,39,119],.32);
+  var bg=mix(base,[255,255,255],.93);
+  var border=mix(base,[255,255,255],.85);
+  var heroMid=mix(accent2,[255,255,255],.9);
+  var r=document.documentElement.style;
+  r.setProperty('--accent',hex);
+  r.setProperty('--accent-strong',toHex(strong));
+  r.setProperty('--accent-2',toHex(accent2));
+  r.setProperty('--accent-bg',toHex(bg));
+  r.setProperty('--accent-border',toHex(border));
+  r.setProperty('--accent-rgb',base.join(','));
+  r.setProperty('--hero-grad','linear-gradient(135deg,'+toHex(bg)+' 0%,'+toHex(heroMid)+' 55%,#fff 100%)');
+  var ci=document.getElementById('colorInput'); if(ci) ci.value=hex;
+  var ch=document.getElementById('colorHex'); if(ch) ch.textContent=hex;
+}
+function pickSwatch(el){
+  document.querySelectorAll('#swatches .swatch').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  applyTheme(el.getAttribute('data-color'));
+}
+function syncSwatch(hex){
+  hex=hex.toLowerCase();
+  var found=false;
+  document.querySelectorAll('#swatches .swatch').forEach(s=>{
+    var on=s.getAttribute('data-color').toLowerCase()===hex;
+    s.classList.toggle('active',on); if(on)found=true;
+  });
+  if(!found) document.querySelectorAll('#swatches .swatch').forEach(s=>s.classList.remove('active'));
+}
+function setKuerzel(val){
+  val=(val||'').toUpperCase().slice(0,3)||'SW';
+  document.querySelectorAll('.school-logo').forEach(l=>l.textContent=val);
+}
+function saveLook(){
+  var b=event.currentTarget; var old=b.textContent;
+  b.textContent='✓ Gespeichert'; b.disabled=true;
+  setTimeout(function(){b.textContent=old;b.disabled=false;},1600);
+}
+renderAllMerkmale();
+renderTemplates();
+renderReminders();
+(function(){var s=document.getElementById('serStart');if(s){var wd=new Date(s.value+'T00:00:00').getDay();var c=document.querySelector('#serWeekdays .wd[data-d="'+wd+'"]');if(c){c.classList.remove('chip-ghost');c.classList.add('chip-accent');}}})();
+if(document.getElementById('serUnit'))serUnitChange();
+generateSeries();
+addInviteRow('inviteList','Anna Schritt','anna@schrittwerk.de','Superadmin');
+addInviteRow('teamInvite','','','Admin');
+</script>
+<div style="position:fixed;bottom:14px;right:14px;background:var(--accent);color:#fff;font-size:11px;padding:6px 12px;border-radius:999px;opacity:.9;z-index:60">PROTOTYP</div>
+</body>
+</html>

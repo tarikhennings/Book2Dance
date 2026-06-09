@@ -1,0 +1,11 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / tooling
+.vscode/
+*.log
+
+# Dependencies (falls später ein Build dazukommt)
+node_modules/
+dist/
