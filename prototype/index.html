@@ -233,6 +233,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
       <option value="schule-team">S7c · Team / Rollen</option>
       <option value="schule-katalog">S7e · Katalog</option>
       <option value="schule-vorlagen">S7d · Vorlagen</option>
+      <option value="schule-embed">S7f · Einbetten</option>
       <option value="schule-einstellungen">S7b · Einstellungen / Look</option>
     </optgroup>
     <optgroup label="Backend Agentur">
@@ -242,6 +243,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
       <option value="agentur-reminder">S11 · Reminder-Standards</option>
       <option value="agentur-vorlagen">S12 · Vorlagen</option>
       <option value="agentur-versand">S13 · Versand</option>
+      <option value="agentur-embed">S14 · Einbetten</option>
     </optgroup>
   </select>
 </div>
@@ -407,11 +409,13 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
         <div class="muted small">Di · 16.06.2026 · 19:00–20:00 · Saal 1</div></div>
         <span class="badge badge-green">4 frei</span></div>
     </div>
-    <form class="card card-p mt-16" onsubmit="event.preventDefault();go('bestaetigung')">
+    <form class="card card-p mt-16" onsubmit="return submitAnmeldung(event)">
       <div class="field"><label class="label">Vor- & Nachname</label><input class="input" placeholder="Maria Musterfrau" required></div>
-      <div class="field"><label class="label">E-Mail</label><input class="input" type="email" placeholder="maria@example.de" required></div>
-      <div class="field"><label class="label">Telefon <span class="muted">(für SMS-/WhatsApp-/Anruf-Erinnerung)</span></label><input class="input" type="tel" placeholder="0151 23456789"></div>
-      <div class="field"><label class="label">Nachricht <span class="muted">(optional)</span></label><textarea class="textarea" placeholder="z. B. Ich komme mit meinem Partner."></textarea></div>
+      <p class="muted tiny" style="margin:-4px 0 10px">Bitte gib mindestens <b>E-Mail oder Telefon</b> an.</p>
+      <div class="field"><label class="label">E-Mail</label><input class="input" id="anmEmail" type="email" placeholder="maria@example.de"></div>
+      <div class="field"><label class="label">Telefon <span class="muted">(für SMS-/WhatsApp-/Anruf-Erinnerung)</span></label><input class="input" id="anmPhone" type="tel" placeholder="0151 23456789"></div>
+      <div class="field"><label class="label">Partner</label><select class="select" data-cat="partner"></select></div>
+      <div class="field"><label class="label">Nachricht <span class="muted">(optional)</span></label><textarea class="textarea" placeholder="z. B. Allergien, Vorkenntnisse …"></textarea></div>
 
       <div class="dashed" style="text-align:left;background:var(--muted-2);padding:14px 16px;margin-bottom:16px">
         <div style="font-weight:550;color:var(--text);margin-bottom:4px">Wie dürfen wir dich an deinen Termin erinnern?</div>
@@ -469,7 +473,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
     <a class="nav-item active" data-go="schule-dash">▦ Dashboard</a>
     <a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
     <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a>
-    <a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-embed">🔗 Einbetten</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
   </aside>
@@ -508,7 +512,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
     <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item active" data-go="schule-kurs">✎ Kurse</a>
-    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-embed">🔗 Einbetten</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
   </aside>
@@ -624,7 +628,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
     <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
-    <a class="nav-item active" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <a class="nav-item active" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-embed">🔗 Einbetten</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
   </aside>
@@ -652,7 +656,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
     <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
-    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item active" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item active" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-embed">🔗 Einbetten</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
   </aside>
@@ -692,7 +696,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
     <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
-    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item active" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item active" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-embed">🔗 Einbetten</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
   </aside>
@@ -721,6 +725,17 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
           <button type="button" class="btn btn-secondary btn-sm" onclick="catAdd('levels','local')">+ Hinzufügen</button>
         </div>
       </div>
+      <div class="card card-p" style="grid-column:1 / -1"><h3 style="margin-bottom:4px">Partner-Optionen</h3>
+        <p class="muted tiny" style="margin:0 0 14px">Auswahl, die der Endkunde beim Buchen trifft (allein/mit Partner). Erste Option = Default.</p>
+        <div class="between" style="margin-bottom:7px"><div class="tiny muted">🌐 Global <span class="muted">(von Agentur · 👁 ausblenden · ⧉ kopieren)</span></div><button type="button" class="btn btn-ghost btn-sm" onclick="catCopyAll('partner')">⧉ Alle kopieren</button></div>
+        <div class="chips" id="cat-partner-inherit"></div>
+        <div class="tiny muted" style="margin:12px 0 7px">🏫 Eigene</div>
+        <div class="chips" id="cat-partner-local"></div>
+        <div class="row mt-12" style="gap:8px">
+          <input class="input" id="cat-partner-localInput" placeholder="Eigene Partner-Option …" onkeydown="if(event.key==='Enter'){event.preventDefault();catAdd('partner','local')}">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="catAdd('partner','local')">+ Hinzufügen</button>
+        </div>
+      </div>
       <div class="card card-p" style="grid-column:1 / -1"><h3 style="margin-bottom:4px">Kurs-Tags</h3>
         <p class="muted tiny" style="margin:0 0 14px">Freie Chips über dem Kurstitel (z. B. „Kein Partner nötig").</p>
         <div class="between" style="margin-bottom:7px"><div class="tiny muted">🌐 Global <span class="muted">(von Agentur · 👁 ausblenden · ⧉ kopieren)</span></div><button type="button" class="btn btn-ghost btn-sm" onclick="catCopyAll('tags')">⧉ Alle kopieren</button></div>
@@ -739,13 +754,65 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
  </div></div></div>
 </section>
 
+<!-- ============ S7f SCHULE · EINBETTEN ============ -->
+<section class="screen" id="screen-schule-embed">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
+    <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item active" data-go="schule-embed">🔗 Einbetten</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Einbetten</h1><p class="muted" style="margin:4px 0 0">Buchungsseite per Code-Snippet auf deiner eigenen Webseite einbinden – responsive für Desktop & Handy.</p></div></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;max-width:1040px">
+      <div class="col gap-24">
+        <div class="card card-p"><div class="between" style="margin-bottom:4px"><h3>Einstellungen</h3>
+            <label class="checkbox" style="align-items:center;margin:0"><input type="checkbox" id="embSchoolUseAgency" onchange="embToggleSchoolUseAgency(this)"><span>Agentur-Standard übernehmen</span></label></div>
+          <p class="muted tiny" id="embSchoolHint" style="margin:0 0 12px"></p>
+          <label class="checkbox" id="embSchoolFilterRow" style="align-items:center"><input type="checkbox" id="embSchoolFilter" onchange="embToggleSchoolFilter(this)"><span style="color:var(--text)">🔎 Suchleiste & Filter anzeigen</span></label>
+        </div>
+        <div class="card card-p"><div class="between" style="margin-bottom:8px"><h3>Code-Snippet</h3><button type="button" class="btn btn-primary btn-sm" onclick="copyEmbed()">Kopieren</button></div>
+          <p class="muted tiny" style="margin:0 0 10px">Diesen Code in die Webseite einfügen – fertig.</p>
+          <pre id="embSnippet" class="mono" style="background:#0b0b0f;color:#e4e4e7;padding:14px;border-radius:10px;font-size:12px;line-height:1.6;overflow:auto;white-space:pre-wrap;margin:0"></pre>
+        </div>
+      </div>
+      <div class="card card-p">
+        <div class="between" style="margin-bottom:10px"><div class="tiny muted" style="text-transform:uppercase;letter-spacing:.05em">Live-Vorschau</div>
+          <div class="row" id="embWidthBtns" style="gap:6px"><button type="button" class="btn btn-primary btn-sm" onclick="embSetWidth('100%',this)">Desktop</button><button type="button" class="btn btn-secondary btn-sm" onclick="embSetWidth('380px',this)">Mobil</button></div></div>
+        <div id="embPreviewFrame" style="max-width:100%;margin:0 auto;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg);transition:max-width .2s">
+          <div class="pubtop" style="position:static;padding:10px 14px"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:13px">Tanzschule Schrittwerk</div><div class="muted tiny">Schnupperkurse buchen</div></div></div>
+          <div style="padding:14px 16px">
+            <div id="embPreviewFilter" class="row wrap" style="gap:6px;margin-bottom:14px"><span class="badge">Alle Stile ▾</span><span class="badge">Alle Level ▾</span><span class="badge">Nächste 3 Monate ▾</span></div>
+            <div class="card card-p" style="box-shadow:none;margin-bottom:10px">
+              <div class="row wrap"><span class="badge badge-accent">Discofox</span><span class="badge">Anfänger</span></div>
+              <h3 class="mt-8" style="font-size:15px">Discofox Schnupperstunde</h3><div class="muted small">Di · 16.06.2026 · 19:00</div>
+              <div class="row mt-8"><span class="dot"></span><span class="small">4 Plätze frei</span></div>
+              <span class="btn btn-primary btn-sm btn-block mt-8">Ansehen & buchen</span>
+            </div>
+            <div class="card card-p" style="box-shadow:none">
+              <div class="row wrap"><span class="badge badge-accent">West Coast Swing</span><span class="badge badge-amber">Probe-Block</span></div>
+              <h3 class="mt-8" style="font-size:15px">WCS Probe-Block · 3 Termine</h3><div class="muted small">Mo · ab 22.06.2026 · 18:30</div>
+              <div class="row mt-8"><span class="dot"></span><span class="small">5 Plätze frei</span></div>
+              <span class="btn btn-primary btn-sm btn-block mt-8">Ansehen & buchen</span>
+            </div>
+          </div>
+        </div>
+        <p class="muted tiny mt-8" style="text-align:center">So erscheint die Buchung auf deiner Seite. „Mobil" zeigt die schmale Ansicht.</p>
+      </div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
 <!-- ============ S7d SCHULE · VORLAGEN ============ -->
 <section class="screen" id="screen-schule-vorlagen">
  <div class="world-pad"><div class="surface"><div class="shell">
   <aside class="sidebar">
     <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
     <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
-    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item active" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item active" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-embed">🔗 Einbetten</a><a class="nav-item" data-go="schule-einstellungen">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
   </aside>
@@ -787,7 +854,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm school-logo">SW</div><div><div style="font-weight:600;font-size:14px">Schrittwerk</div><div class="muted tiny">Tanzschule</div></div></div>
     <a class="nav-item" data-go="schule-dash">▦ Dashboard</a><a class="nav-item" data-go="schule-kurs">✎ Kurse</a>
-    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item active" data-go="schule-einstellungen">⚙ Einstellungen</a>
+    <a class="nav-item" data-go="schule-teilnehmer">☷ Teilnehmer</a><a class="nav-item" data-go="schule-team">👥 Team</a><a class="nav-item" data-go="schule-katalog">🗂 Katalog</a><a class="nav-item" data-go="schule-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="schule-embed">🔗 Einbetten</a><a class="nav-item active" data-go="schule-einstellungen">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="agentur">↔ Agentur-Sicht</a><a class="nav-item" data-go="home">← Start</a>
   </aside>
@@ -932,7 +999,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item active" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a><a class="nav-item" data-go="agentur-embed">🔗 Einbetten</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -971,7 +1038,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item active" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a><a class="nav-item" data-go="agentur-embed">🔗 Einbetten</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -1013,7 +1080,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item active" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item active" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a><a class="nav-item" data-go="agentur-embed">🔗 Einbetten</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -1038,6 +1105,15 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
           <div class="row mt-16" style="gap:8px">
             <input class="input" id="cat-levels-agencyInput" placeholder="Neues Level …" onkeydown="if(event.key==='Enter'){event.preventDefault();catAdd('levels','global')}">
             <button type="button" class="btn btn-primary btn-sm" onclick="catAdd('levels','global')">+ Hinzufügen</button>
+          </div>
+        </div>
+        <div class="card card-p">
+          <div class="between" style="margin-bottom:4px"><h3>Partner-Optionen</h3><span class="badge badge-accent">Buchung</span></div>
+          <p class="muted tiny" style="margin:0 0 14px">Auswahl beim Buchen: „komme allein / brauche Partner" vs. „komme mit Partner". Erste = Default.</p>
+          <div class="chips" id="cat-partner-agency"></div>
+          <div class="row mt-16" style="gap:8px">
+            <input class="input" id="cat-partner-agencyInput" placeholder="Neue Partner-Option …" onkeydown="if(event.key==='Enter'){event.preventDefault();catAdd('partner','global')}">
+            <button type="button" class="btn btn-primary btn-sm" onclick="catAdd('partner','global')">+ Hinzufügen</button>
           </div>
         </div>
         <div class="card card-p">
@@ -1070,7 +1146,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item active" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item active" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a><a class="nav-item" data-go="agentur-embed">🔗 Einbetten</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -1107,7 +1183,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item active" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item active" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a><a class="nav-item" data-go="agentur-embed">🔗 Einbetten</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -1142,7 +1218,7 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
   <aside class="sidebar">
     <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
     <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
-    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item active" data-go="agentur-versand">📤 Versand</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item active" data-go="agentur-versand">📤 Versand</a><a class="nav-item" data-go="agentur-embed">🔗 Einbetten</a>
     <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
     <div class="spacer"></div><div class="nav-sec">Prototyp</div>
     <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
@@ -1202,6 +1278,38 @@ h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
           <li><b>oder Schule</b>: eigene Domain/SMTP in den Schul-Einstellungen</li>
         </ol>
         <div class="notice mt-16">So müssen kleine Schulen nichts einrichten – große können trotzdem ihre eigene Domain nutzen.</div>
+      </div>
+    </div>
+  </main>
+ </div></div></div>
+</section>
+
+<!-- ============ S14 AGENTUR · EINBETTEN ============ -->
+<section class="screen" id="screen-agentur-embed">
+ <div class="world-pad"><div class="surface"><div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo sm" style="background:linear-gradient(135deg,#2563eb,#0891b2)">DC</div><div><div style="font-weight:600;font-size:14px">DanceConsult</div><div class="muted tiny">Agentur</div></div></div>
+    <a class="nav-item" data-go="agentur">▦ Tanzschulen</a><a class="nav-item">📊 Auswertungen</a>
+    <a class="nav-item" data-go="agentur-merkmale">🏷 Kataloge</a><a class="nav-item" data-go="agentur-reminder">🔔 Reminder</a><a class="nav-item" data-go="agentur-vorlagen">✉ Vorlagen</a><a class="nav-item" data-go="agentur-versand">📤 Versand</a><a class="nav-item active" data-go="agentur-embed">🔗 Einbetten</a>
+    <a class="nav-item">👥 Nutzer</a><a class="nav-item">⚙ Einstellungen</a>
+    <div class="spacer"></div><div class="nav-sec">Prototyp</div>
+    <a class="nav-item" data-go="schule-dash">↔ In eine Schule</a><a class="nav-item" data-go="home">← Start</a>
+  </aside>
+  <main class="main">
+    <div class="between page-head"><div><h1>Einbetten</h1><p class="muted" style="margin:4px 0 0">Standard für das Buchungs-Widget aller Schulen. Jede Schule kann abweichen.</p></div></div>
+    <div class="grid" style="grid-template-columns:1.5fr 1fr;align-items:start;max-width:1000px">
+      <div class="card card-p"><h3 style="margin-bottom:4px">Widget-Standard</h3>
+        <p class="muted tiny" style="margin:0 0 14px">Gilt für alle Schulen, die „Agentur-Standard übernehmen".</p>
+        <label class="checkbox" style="align-items:center"><input type="checkbox" id="embAgencyFilter" onchange="embToggleAgencyFilter(this)"><span style="color:var(--text)">🔎 Suchleiste & Filter standardmäßig anzeigen</span></label>
+      </div>
+      <div class="card card-p" style="position:sticky;top:24px;background:var(--muted-2)">
+        <h3>So funktioniert's</h3>
+        <ol class="muted small mt-8" style="margin:0;padding-left:18px;line-height:2">
+          <li><b>Agentur</b> (hier): Standard fürs Widget</li>
+          <li><b>Schule</b>: übernimmt oder stellt eigenes ein</li>
+          <li>Schule kopiert dann ihr <b>Code-Snippet</b> auf die Webseite</li>
+        </ol>
+        <div class="notice mt-16">Das eingebettete Widget ist responsive – Desktop & Handy.</div>
       </div>
     </div>
   </main>
@@ -1271,6 +1379,41 @@ document.addEventListener('click',function(e){
   if(t){e.preventDefault(); go(t.getAttribute('data-go'));}
 });
 function pick(el){document.querySelectorAll('#terms .term').forEach(t=>t.classList.remove('selected'));el.classList.add('selected');}
+function submitAnmeldung(e){
+  e.preventDefault();
+  var em=(document.getElementById('anmEmail').value||'').trim();
+  var ph=(document.getElementById('anmPhone').value||'').trim();
+  if(!em && !ph){alert('Bitte gib mindestens eine E-Mail-Adresse oder eine Telefonnummer an.');return false;}
+  go('bestaetigung');return false;
+}
+
+/* ===== Embed / iFrame-Snippet (Agentur-Default + Schule) ===== */
+var EMBED={agencyShowFilter:true,schoolUseAgency:true,schoolShowFilter:true};
+function embedShowFilter(){return EMBED.schoolUseAgency?EMBED.agencyShowFilter:EMBED.schoolShowFilter;}
+function renderEmbed(){
+  var at=document.getElementById('embAgencyFilter'); if(at)at.checked=EMBED.agencyShowFilter;
+  var su=document.getElementById('embSchoolUseAgency'); if(su)su.checked=EMBED.schoolUseAgency;
+  var sf=document.getElementById('embSchoolFilter'); if(sf){sf.checked=EMBED.schoolShowFilter;sf.disabled=EMBED.schoolUseAgency;}
+  var row=document.getElementById('embSchoolFilterRow'); if(row)row.style.opacity=EMBED.schoolUseAgency?'.45':'1';
+  var hint=document.getElementById('embSchoolHint'); if(hint)hint.textContent=EMBED.schoolUseAgency?('Es gilt der Agentur-Standard: Filter '+(EMBED.agencyShowFilter?'an':'aus')+'.'):'Eigene Einstellung dieser Schule.';
+  var show=embedShowFilter();
+  var sn=document.getElementById('embSnippet');
+  if(sn)sn.textContent='<iframe\n  src="https://book2dance.de/embed/schrittwerk?filter='+(show?'on':'off')+'"\n  width="100%" height="760" loading="lazy"\n  style="border:0;border-radius:14px"></iframe>';
+  var pf=document.getElementById('embPreviewFilter'); if(pf)pf.style.display=show?'':'none';
+}
+function embToggleAgencyFilter(cb){EMBED.agencyShowFilter=cb.checked;renderEmbed();}
+function embToggleSchoolUseAgency(cb){EMBED.schoolUseAgency=cb.checked;renderEmbed();}
+function embToggleSchoolFilter(cb){EMBED.schoolShowFilter=cb.checked;renderEmbed();}
+function embSetWidth(w,btn){
+  var fr=document.getElementById('embPreviewFrame'); if(fr)fr.style.maxWidth=w;
+  [].forEach.call(document.querySelectorAll('#embWidthBtns .btn'),function(b){b.className='btn btn-secondary btn-sm';});
+  btn.className='btn btn-primary btn-sm';
+}
+function copyEmbed(){
+  var t=document.getElementById('embSnippet').textContent;
+  try{navigator.clipboard.writeText(t);}catch(e){}
+  var b=event.currentTarget,o=b.textContent;b.textContent='✓ Kopiert';setTimeout(function(){b.textContent=o;},1500);
+}
 
 /* ===== Merkmale / Chips verwalten ===== */
 function buildChip(text,opts){
@@ -1403,11 +1546,12 @@ function removeMerkmal(scope,name){
 /* ===== Kataloge: Tanzstile & Level (global + lokal) ===== */
 var CAT={
   styles:{global:['Discofox','Salsa','West Coast Swing','Standard/Latein','HipHop'],local:[],hidden:[]},
-  levels:{global:['Anfänger','Fortgeschritten'],local:[],hidden:[]}
+  levels:{global:['Anfänger','Fortgeschritten'],local:[],hidden:[]},
+  partner:{global:['Ich komme allein – ich brauche eine:n Partner:in','Ich komme mit Partner:in'],local:[],hidden:[]}
 };
 function catAll(key){return CAT[key].global.filter(function(n){return CAT[key].hidden.indexOf(n)<0;}).concat(CAT[key].local);}
 function renderCatalogs(){
-  ['styles','levels'].forEach(function(key){
+  ['styles','levels','partner'].forEach(function(key){
     var ag=document.getElementById('cat-'+key+'-agency');
     if(ag){ag.innerHTML='';CAT[key].global.forEach(function(n){ag.appendChild(libChip(n,{onRemove:function(){catRemove(key,'global',n);}}));});}
     schoolGlobalChips('cat-'+key+'-inherit',key);
@@ -1901,6 +2045,7 @@ renderAllMerkmale();
 renderCatalogs();
 renderTemplates();
 renderReminders();
+renderEmbed();
 if(document.getElementById('schoolUseAgency'))toggleSchoolUseAgency(document.getElementById('schoolUseAgency'));
 (function(){var s=document.getElementById('serStart');if(s){var wd=new Date(s.value+'T00:00:00').getDay();var c=document.querySelector('#serWeekdays .wd[data-d="'+wd+'"]');if(c){c.classList.remove('chip-ghost');c.classList.add('chip-accent');}}})();
 if(document.getElementById('serUnit'))serUnitChange();

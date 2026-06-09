@@ -141,12 +141,22 @@ Kontrollierte Listen, die Buchungsfilter und die Kurs-Dropdowns (Tanzstil/Level)
 
 ```
 Catalog {
-  type     : enum(style | level)
+  type     : enum(style | level | partner)   // partner = Auswahl beim Buchen (allein / mit Partner)
   label    : string
   scope    : enum(agency | school)
   school_id: uuid | null
 }
 ```
+
+**Booking-Pflicht:** Beim Buchen muss **E-Mail oder Telefon** angegeben sein (mind. eins). **Partner-Auswahl** (Catalog `partner`) als Dropdown, Default = erste Option.
+
+### Embed / iFrame-Widget
+
+Buchungs-Widget zum Einbetten auf der Schul-Webseite (responsive). Konfiguration vererbt (Agentur-Default → Schule):
+```
+EmbedConfig { owner_level: agency|school, show_filter: bool }   // School.use_agency analog zum Versand
+```
+Snippet: `<iframe src="…/embed/<schule>?filter=on|off" …>`. Verwaltung: Schule S7f „Einbetten" (Config + Live-Vorschau Desktop/Mobil + Copy-Snippet), Agentur S14 (Default).
 
 - Verwaltung: **eigener Screen je Ebene** — Agentur „Kataloge" (S10) und Schule „🗂 Katalog" (S7e), jeweils Tanzstile/Level/Kurs-Tags (global geerbt + eigene). Neue Stile/Level auch **inline beim Kurs anlegen** (➕ Neu) → landen im Schul-Katalog.
 - Effektive Liste = `(global \ school.hidden) + school.local`. Die Schule kann globale Einträge **ausblenden** (`hidden[]`, 👁), **einzeln kopieren** (⧉ → wird zu eigenem, editierbarem `local`-Eintrag) oder **alle kopieren** (⧉ Alle kopieren). Gilt für Tanzstile, Level und Kurs-Tags.
