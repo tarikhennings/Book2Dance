@@ -1,0 +1,9 @@
+{
+  "name": "book2dance-prototype",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Klickbarer Prototyp für Book2Dance",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
