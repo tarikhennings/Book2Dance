@@ -190,13 +190,14 @@ agency.rules       = immer direkt (oberste Ebene)
 - Im Prototyp entspricht das den Schaltern „Schul-Standard verwenden" (Kurs) bzw. „Agentur-Standard verwenden" (Schule).
 - Kanäle: `email`, `sms`, `whatsapp`, `voice` (automatischer Anruf).
 
-### 5.1a Absender-Identität (pro Schule)
+### 5.1a Absender-Identität (Agentur + Schule, vererbt)
 
-Wie Reminder beim Empfänger erscheinen — am `School` (bzw. ableitbar aus `Branding`).
+Wie Reminder beim Empfänger erscheinen. Existiert auf **Agentur-** und **Schul-Ebene**; die Schule kann den Agentur-Versand übernehmen oder eigenen setzen.
 
 ```
 SenderIdentity {
-  school_id
+  owner_level    : enum(agency | school)
+  owner_id       : uuid
   from_name      : string   // E-Mail-Absendername
   from_email     : string   // Absende-Adresse
   email_verified : bool      // SPF/DKIM/DMARC der Domain geprüft
@@ -206,6 +207,8 @@ SenderIdentity {
   voice_caller_id: string | null
 }
 ```
+
+Auflösung: `effective_sender(school) = school.use_agency ? agency.sender : school.sender`. Beispiel: Agentur „DanceConsult" versendet über „Dancepreneur"; kleine Schulen übernehmen das, große setzen eigene Domain.
 
 ### 5.1a-2 Versand-Infrastruktur
 
@@ -217,12 +220,15 @@ Kein roher SMTP-Server pro Schule. Best Practice Multi-Tenant:
 - Transaktional (Reminder/Bestätigung) von Marketing trennen; Shared-IP-Pool mit Throttling, dedizierte IP erst bei Volumen.
 
 ```
-School.email_delivery {
-  mode: enum(managed | own_smtp)   // default managed
-  // managed: nutzt Plattform-ESP + SenderIdentity (DKIM)
-  // own_smtp: { host, port, username, password, encryption: STARTTLS|SSL|none }
+EmailDelivery {                      // existiert auf Agentur- UND Schul-Ebene
+  owner_level: enum(agency | school)
+  mode: enum(managed | own_smtp)     // managed = Plattform-ESP + DKIM; own_smtp = eigener Server
+  own_smtp: { label, host, port, username, password, encryption: STARTTLS|SSL|none } | null
 }
+School.use_agency_delivery: bool      // true = Agentur-Versand (z. B. Dancepreneur) übernehmen
 ```
+
+Dreistufig: **Book2Dance (Plattform-ESP)** → **Agentur** (managed ODER eigener SMTP wie Dancepreneur) → **Schule** (`use_agency_delivery=true` übernimmt die Agentur, sonst eigener `managed`/`own_smtp`).
 
 ### 5.1b Einwilligung (Consent, pro Buchung)
 
@@ -306,8 +312,8 @@ Branding {
 | MessageTemplate | Agentur S12 „Vorlagen" (global) + Schule S7d „Vorlagen" (eigene + Kopieren) + Modal `openTemplate()`/`TEMPLATES` |
 | Tag (global/lokal) | Agentur S10 „Tags", Schule (Einstellungen), Kurs S6 + `MERKMALE` |
 | Membership/Rollen | Agentur S9 (Einladen) + Schule S7c „Team" + `addInviteRow()` |
-| SenderIdentity | Schule S7b „Einstellungen → Absender" + `SENDER`/`senderMeta()` |
-| email_delivery (managed/own_smtp) | Schule S7b „Einstellungen → E-Mail-Versand" + `setSendMode()`; Agentur S11-Hinweis |
+| SenderIdentity (Agentur + Schule) | Agentur S13 „Versand" + Schule S7b „Einstellungen → Versand" + `SENDER`/`SENDER_AGENCY`/`effSender()` |
+| EmailDelivery + use_agency | Agentur S13 (`setSendModeAgency`) + Schule S7b (`toggleSchoolUseAgency`/`setSendMode`) |
 | Booking.consent | Anmeldeformular S3 (Opt-in pro Kanal) |
 | Course.hero_image (optional) | Kurs-Editor S6 „Kursbild" → Hero-Hintergrund auf S2; ohne Bild Akzent-Verlauf (Fallback) |
 | Branding | Schule S7b „Einstellungen / Look" + `applyTheme()` |
